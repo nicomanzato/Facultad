@@ -1,0 +1,56 @@
+{% extends 'bestnidBundle:CategoriaSubasta:base.html.twig' %}
+
+{% block contenedor -%}
+<ol class="breadcrumb">
+  <li><a href="{{ path('admin')}}">Administracion</a></li>
+  <li class="active">Categoria de Subastas</li>
+</ol>
+<div class="panel">
+	
+	<h3 class="highlight">Listado de Categorias de Subastas</h3>
+		
+	<div class="pull-right"><a class="btn btn-primary" href="{{ path('categoriasubasta_create') }}">+</a></div>
+
+	
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Descripcion de categoria</th>
+                <th>Categoria Padre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>{{ entity.descripcionCategoriaSubasta }}</td>
+                <td>{{ entity.idPadreCategoriaSubasta }}</td>
+                <td>
+                
+                        <a href="{{ path('categoriasubasta_edit', { 'id': entity.id }) }}">Modificar</a>
+                    
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+	{% if cantidadPaginas > 0 %}
+	<div align="center">
+			<ul class="pagination">
+				{% for i in 0..cantidadPaginas-1 %}
+					<li
+						
+						{% if (i == paginaActual) %}
+						   
+						   	class="active"
+						   
+						   {% endif %}
+						
+						
+						><a href="{{ path('categoriasubasta', { 'paginaActual': i }) }}">{{ i+1 }}</a></li>
+				{% endfor %}
+			</ul>
+			</div>
+	{% endif %}
+</div>
+    {% endblock %}

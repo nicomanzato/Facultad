@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:h="http://java.sun.com/jsf/html"
+template="/WEB-INF/facelets/templates/defaultLayout.xhtml"
+xmlns:componentes="http://java.sun.com/jsf/composite/componentes"
+xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:define name="titulo">
+Mi cuenta - JRuteros
+</ui:define>
+<ui:define name="encabezado">
+Mi cuenta
+</ui:define>
+<ui:define name="contenido">
+<div class="row">
+
+        <div class="col-md-4">
+            
+            
+            <ui:include src="/WEB-INF/sideMenu.xhtml" />
+            
+            
+        </div>
+        
+        <div class="col-md-8">
+            
+            <h:form id="backendForm" class="form-singin">
+            
+            	<p><h:message for="backendForm" style="color: red" /></p>
+            
+	            <componentes:inputLabel id="usernameInput" value="#{user.username}" label="Username" readonly="true" />
+		    	
+				<componentes:emailInput id="emailInput" value="#{user.email}" label="E-Mail" />
+				    	
+				<componentes:inputLabel id="nombreInput" value="#{user.nombre}" label="Nombre" />
+				    	
+				<componentes:inputLabel id="segundoNombreInput" value="#{user.segundoNombre}" label="Segundo Nombre" />
+				    	
+				<componentes:inputLabel id="apellidoInput" value="#{user.apellido}" label="Apellido" />
+				    	
+				<componentes:inputLabel id="dniInput" value="#{user.dni}" label="DNI" />
+				    	
+				<componentes:inputLabel id="domicilioInput" value="#{user.domicilio}" label="Domicilio" />
+				    	
+				<componentes:dateInput id="fecha" value="#{user.fechaNacimiento}" label="Fecha de Nacimiento" />
+				    	
+				<componentes:sexoSelectInput id="sexo" value="#{user.sexo}" label="Sexo" />
+			
+				<br/>
+				
+				<h:commandButton value="Actualizar informacion" class="btn btn-success btn-large btn-block" action="#{user.update}"/>
+				
+			</h:form>
+			
+        </div>
+    </div>
+</ui:define>
+</ui:composition>

@@ -1,0 +1,563 @@
+<?php
+
+namespace bestnidBundle\Controller;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use bestnidBundle\Entity\Pregunta;
+use bestnidBundle\Entity\Subasta;
+use bestnidBundle\Form\SubastaType;
+use bestnidBundle\Form\PreguntaType;
+use bestnidBundle\Form\SubastaEditType;
+
+/**
+ * Subasta controller.
+ *
+ * @Route("/subasta")
+ */
+class SubastaController extends Controller{
+
+	private $subastasPorPagina = 5;
+	
+    /**
+     * Lists user's Subasta entities.
+     *
+     * @Route("/usuario/{paginaActual}/{msg}", name="subastasUsuario")
+     * @Method("GET")
+     * @Template()
+     */
+    public function misSubastasAction($paginaActual = 0, $msg = 0)
+    {		
+		$subastas = $this->getSubastasWithUser($paginaActual);
+		
+		//------------------*-------------------------
+		
+		return array(
+			'msg' => $msg,
+            'entities' => $subastas,
+			'cantidadPaginas' => ceil($this->countSubastasWithUser() / $this->subastasPorPagina),
+			'paginaActual' => $paginaActual,
+        ); 
+    }
+	
+	/**
+     * Lists all Subasta entities.
+     *
+     * @Route("/listado/{CategoriaURL}/{paginaActual}", name="listarSubastas")
+     * @Method("GET")
+     * @Template()
+     */
+    public function indexAction($CategoriaURL = 'c',$paginaActual = 0)
+    {
+        $subastas = $this->getSubastasWithURL($CategoriaURL, $paginaActual);
+			
+		// -------------*-----------------
+		
+		$categorias = $this->getCategoriasByIdParent($this->getIdCategoriaByURL($CategoriaURL));
+		//------------------*-------------------------
+		
+		$em = $this->getDoctrine()->getManager();
+
+        $Categoria = $em->getRepository('bestnidBundle:CategoriaSubasta')->find($this->getIdCategoriaByURL($CategoriaURL));
+		
+		return array(
+            'entities' => $subastas,
+			'categorias' => $categorias,
+			'cantidadPaginas' => ceil($this->countSubastasWithURL($CategoriaURL, $paginaActual) / $this->subastasPorPagina),
+			'paginaActual' => $paginaActual,
+			'CategoriaURL' => $CategoriaURL,
+			'Categoria' => $Categoria
+        ); 
+    }
+	
+    /**
+     * Creates a new Subasta entity.
+     *
+     * @Route("/new", name="subasta_create")
+     * @Method("POST")
+     * @Template("bestnidBundle:Subasta:new.html.twig")
+     */
+    public function createAction(Request $request)
+    {
+        $entity = new Subasta();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+			$entity->setIdUserSubastador($this->getDoctrine()->getManager()->getRepository('bestnidBundle:User')->findOneById($this->getUser()->getId()));
+			$entity->setEstado(0);
+			$entity->setFechaPublicacion(new \DateTime());
+			$entity->setFechaOfertaGanadora(new \DateTime('-100 day'));
+			$entity->setFechaVencimiento( (new \DateTime('+'.($form->getData()->getFechaVencimiento().' day'))));
+			$entity->setIdCategoriaSubasta($this->getDoctrine()->getManager()->getRepository('bestnidBundle:CategoriaSubasta')->findOneById($form->getData()->getIdCategoriaSubasta()));
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+			$entity->upload();
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('subasta_show', array('id' => $entity->getId())));
+        }
+
+        return array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        );
+    }
+
+    /**
+     * Creates a form to create a Subasta entity.
+     *
+     * @param Subasta $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(Subasta $entity)
+    {
+        $form = $this->createForm(new SubastaType($this->getCategoriaSubastasHijas()), $entity, array(
+            'action' => $this->generateUrl('subasta_create'),
+            'method' => 'POST',
+        ));
+
+        $form->add('submit', 'submit', array('label' => 'Enviar','attr' => array('class' => 'btn btn-large btn-primary btn-block') ));
+
+        return $form;
+    }
+
+    /**
+     * Displays a form to create a new Subasta entity.
+     *
+     * @Route("/new", name="subasta_new")
+     * @Method("GET")
+     * @Template()
+     */
+    public function newAction()
+    {
+        $entity = new Subasta();
+        $form   = $this->createCreateForm($entity);
+
+        return array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        );
+    }
+
+    /**
+     * Finds and displays a Subasta entity.
+     *
+     * @Route("/publicacion/{id}/{msg}", name="subasta_show")
+     * @Method("GET")
+     * @Template()
+     */
+    public function showAction($id, $msg = 0)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('bestnidBundle:Subasta')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Subasta entity.');
+        }
+
+        $deleteForm = $this->createDeleteForm($id);
+
+        return array(
+			'subastas_similares' => $this->getSubastasSimilares($entity),
+			'msg' => $msg,
+			'preguntas' => $this->getPreguntas($entity->getId()),
+			'pregunta_form' => $this->createPreguntaCreateForm( new Pregunta )->createView(),
+            'entity'      => $entity,
+            'delete_form' => $deleteForm->createView(),
+        );
+    }
+	
+	private function getSubastasSimilares($Subasta){
+		
+		$repositorioSubastas= $this->getDoctrine()->getRepository('bestnidBundle:Subasta');
+		
+		$query = $repositorioSubastas->createQueryBuilder('p')
+			->where('p.idCategoriaSubasta = :idCategoriaSubasta')
+			->andWhere('p.id <> :id')
+			->andWhere('p.estado = 0')
+			->setParameter('idCategoriaSubasta', $Subasta->getIdCategoriaSubasta()->getId())
+			->setParameter('id', $Subasta->getId())
+			->setMaxResults(4)
+			->getQuery();
+			
+		return $query->getResult();
+		
+	}
+	
+	/**
+     *
+     * @Route("/ofertas/{idSubasta}", name="subasta_ofertas_show")
+     * @Method("GET")
+     * @Template()
+     */
+    public function showOfertasAction($idSubasta)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('bestnidBundle:Subasta')->find($idSubasta);
+       
+	    $ofertas = $em->getRepository('bestnidBundle:Oferta')->findBySubasta($idSubasta);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Subasta entity.');
+        }
+		
+        return array(
+			'ofertas' => $ofertas,
+            'entity'      => $entity,
+            
+        );
+    }
+	
+	/**
+     *
+     * @Route("/finalizar/{idSubasta}", name="subasta_finalizar")
+     * @Method("GET")
+     * @Template()
+     */
+    public function finalizarAction($idSubasta)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('bestnidBundle:Subasta')->find($idSubasta);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('No se pudo encontrar la subasta.');
+        }
+		
+		$entity->setEstado(1);
+		
+		$em = $this->getDoctrine()->getManager();
+        $em->flush();
+		
+        return $this->redirect($this->generateUrl('subastasUsuario',['msg' => 1]));
+    }
+
+
+	private function createPreguntaCreateForm(Pregunta $entity)
+    {
+        $form = $this->createForm(new PreguntaType(), $entity, array(
+            'action' => $this->generateUrl('pregunta_create'),
+            'method' => 'POST',
+        ));
+
+        $form->add('submit', 'submit', array('label' => 'Preguntar','attr' => array('class' => 'btn btn-large btn-primary') ));
+
+        return $form;
+    }
+	
+    /**
+     * Displays a form to edit an existing Subasta entity.
+     *
+     * @Route("/{id}/edit", name="subasta_edit")
+     * @Method("GET")
+     * @Template()
+     */
+    public function editAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('bestnidBundle:Subasta')->find($id);
+		
+		if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Subasta entity.');
+        }
+		
+		if ($entity->getIdUserSubastador()->getId() == $this->getUser()->getId()){
+		
+			$editForm = $this->createEditForm($entity);
+			$deleteForm = $this->createDeleteForm($id);
+
+			return array(
+				'entity'      => $entity,
+				'edit_form'   => $editForm->createView(),
+				'delete_form' => $deleteForm->createView(),
+			);
+			
+		}else{
+			
+			return $this->redirect($this->generateUrl('permisoDenegado'));
+			
+		}
+    }
+
+    /**
+    * Creates a form to edit a Subasta entity.
+    *
+    * @param Subasta $entity The entity
+    *
+    * @return \Symfony\Component\Form\Form The form
+    */
+    private function createEditForm(Subasta $entity)
+    {
+        $form = $this->createForm(new SubastaEditType($this->getCategoriaSubastasHijas()), $entity, array(
+            'action' => $this->generateUrl('subasta_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+        ));
+
+        $form->add('submit', 'submit', array('label' => 'Actualizar','attr' => array('class' => 'btn btn-large btn-warning btn-block') ));
+
+        return $form;
+    }
+    /**
+     * Edits an existing Subasta entity.
+     *
+     * @Route("/{id}", name="subasta_update")
+     * @Method("PUT")
+     * @Template("bestnidBundle:Subasta:edit.html.twig")
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('bestnidBundle:Subasta')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Subasta entity.');
+        }
+
+        $deleteForm = $this->createDeleteForm($id);
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+			$entity->upload();
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('subasta_show', array('id' => $id)));
+        }
+
+        return array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        );
+    }
+    /**
+     * Deletes a Subasta entity.
+     *
+     * @Route("/{id}", name="subasta_delete")
+     * @Method("DELETE")
+     */
+    public function deleteAction(Request $request, $id)
+    {
+        $form = $this->createDeleteForm($id);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('bestnidBundle:Subasta')->find($id);
+
+            if (!$entity) {
+                throw $this->createNotFoundException('Unable to find Subasta entity.');
+            }
+			
+			
+            $em->remove($entity);
+            $em->flush();,
+        }
+
+        return $this->redirect($this->generateUrl('subastasUsuario',array('msg' => 1)));
+    }
+
+    /**
+     * Creates a form to delete a Subasta entity by id.
+     *
+     * @param mixed $id The entity id
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('subasta_delete', array('id' => $id)))
+            ->setMethod('DELETE')
+            ->add('submit', 'submit', array('label' => 'Eliminar','attr' => array('class' => 'btn btn-large btn-danger btn-block') ))
+            ->getForm()
+        ;
+    }
+	
+	/*
+	*
+	*   Devuelve las categorias cuyo idCategoriaPadre sea igual al parametro
+	*
+	*/
+	
+	private function getCategoriasByIdParent($idCategoriaPadre){
+		
+		$repositorioCategorias= $this->getDoctrine()->getRepository('bestnidBundle:CategoriaSubasta');
+		
+		if ($idCategoriaPadre != 'c'){
+			
+			return $repositorioCategorias->findBy(['idPadreCategoriaSubasta' => $idCategoriaPadre]);
+			
+		}else{
+		
+			return $repositorioCategorias->findBy(['idPadreCategoriaSubasta' => null]);
+			
+		}
+	}
+	
+	/*
+	*
+	*   Devuelve las categorias cuyo nombreURL sea igual al pasado por parametro
+	*
+	*/
+	
+	private function getIdCategoriaByURL($CategoriaURL){
+		
+		$repositorioCategorias= $this->getDoctrine()->getRepository('bestnidBundle:CategoriaSubasta');
+
+		if ($CategoriaURL != 'c'){
+		
+			$query = $repositorioCategorias->createQueryBuilder('p')
+				->where('p.nombreURL = :categoriaURL')
+				->setParameter('categoriaURL', $CategoriaURL)
+				->getQuery();
+			
+			return $query->getSingleResult()->getId();
+			
+		}else{
+		
+			return 'c';
+			
+		}
+		
+		
+		
+	}
+	
+	/*
+	*
+	*   Devuelve las Subastas cuya Categoria sea la pasada por parametro
+	*	Exepto que se envie 'c' en el parametro de CategoriaURL
+	*	en cuyo caso se ignorara el parametro enviado.
+	*
+	*/
+	
+	private function getSubastasWithURL($CategoriaURL = 'c', $paginaActual = '0'){
+	
+		$repository = $this->getDoctrine()->getRepository('bestnidBundle:Subasta');
+	
+		$repositoryCategoriaSubasta = $this->getDoctrine()->getRepository('bestnidBundle:CategoriaSubasta');
+		
+		$qb2 = $repositoryCategoriaSubasta->createQueryBuilder('c')->where('c.nombreURL = :CategoriaURL')->setParameter(':CategoriaURL',$CategoriaURL);
+		
+		$Categoria = $qb2->getQuery()->getSingleResult();
+		
+		$qb = $repository->createQueryBuilder('s');
+		
+			$qb->select('s')
+				->innerJoin('bestnidBundle:CategoriaSubasta', 'cat', 'WITH', 'cat.id = s.idCategoriaSubasta')
+				->orderBy('s.fechaPublicacion','DESC')
+				->setFirstResult($paginaActual * $this->subastasPorPagina)	
+				->setMaxResults($this->subastasPorPagina)
+				->andWhere('cat.nombreURL = :nombreURL or cat.idPadreCategoriaSubasta = :idCategoriaPadre')
+				->andWhere('(s.fechaVencimiento > :now AND s.estado = 0)')
+				->setParameter('now', new \DateTime('now'))
+				->setParameter(':nombreURL',$CategoriaURL)
+				->setParameter(':idCategoriaPadre', $Categoria->getId());
+				
+
+			return $qb->getQuery()->getResult();
+			
+		
+	
+	}
+	
+	private function countSubastasWithURL($CategoriaURL, $paginaActual){
+	
+		$repository = $this->getDoctrine()->getRepository('bestnidBundle:Subasta');
+		
+		$repositoryCategoriaSubasta = $this->getDoctrine()->getRepository('bestnidBundle:CategoriaSubasta');
+		
+		$qb2 = $repositoryCategoriaSubasta->createQueryBuilder('c')->where('c.nombreURL = :CategoriaURL')->setParameter(':CategoriaURL',$CategoriaURL);
+		
+		$Categoria = $qb2->getQuery()->getSingleResult();
+			
+		$qb = $repository->createQueryBuilder('s');
+		
+		$qb->select('s')
+				->innerJoin('bestnidBundle:CategoriaSubasta', 'cat', 'WITH', 'cat.id = s.idCategoriaSubasta')
+				->orderBy('s.fechaPublicacion','DESC')
+				->andWhere('cat.nombreURL = :nombreURL or cat.idPadreCategoriaSubasta = :idCategoriaPadre')
+				->andWhere('(s.fechaVencimiento > :now AND s.estado = 0)')
+				->setParameter('now', new \DateTime('now'))
+				->setParameter(':nombreURL',$CategoriaURL)
+				->setParameter(':idCategoriaPadre', $Categoria->getId());   
+			
+		return count($qb->getQuery()->getResult());
+	
+	}
+	
+	private function getSubastasWithUser($paginaActual = '0'){
+	
+		$repository = $this->getDoctrine()->getRepository('bestnidBundle:Subasta');
+			
+		$qb = $repository->createQueryBuilder('s');
+		
+		$qb->select('s')
+			->setFirstResult($paginaActual * $this->subastasPorPagina)	
+			->setMaxResults($this->subastasPorPagina)
+			->orderBy('s.fechaPublicacion','DESC');
+		
+			$qb->andWhere('s.idUserSubastador = :User');
+			$qb->setParameter(':User',$this->getUser()->getId());	    
+			
+			
+		return $qb->getQuery()->getResult();
+	
+	}
+	
+	private function countSubastasWithUser(){
+	
+		$repository = $this->getDoctrine()->getRepository('bestnidBundle:Subasta');
+			
+		$qb = $repository->createQueryBuilder('s');
+		
+		$qb->select('s');
+		
+		$qb->andWhere('s.idUserSubastador = :User');
+		$qb->setParameter(':User',$this->getUser()->getId());	    
+			
+		return count($qb->getQuery()->getResult());
+	
+	}
+	
+	public function getCategoriaSubastasHijas(){
+	
+		$repository = $this->getDoctrine()->getRepository('bestnidBundle:CategoriaSubasta');
+			
+		$qb = $repository->createQueryBuilder('cat');
+		
+		$qb->select('cat');
+		
+		$qb->andWhere('cat.idPadreCategoriaSubasta IS NOT NULL');   
+			
+		return $qb->getQuery()->getResult();
+		
+	}
+	
+	public function getPreguntas($idSubasta){
+	
+		$repository = $this->getDoctrine()->getRepository('bestnidBundle:Pregunta');
+			
+		$qb = $repository->createQueryBuilder('p');
+		
+		$qb->select('p');
+		
+		$qb->andWhere('p.subasta = :id');
+
+		$qb->setParameter(':id',$idSubasta);
+			
+		return $qb->getQuery()->getResult();
+		
+	}
+	
+}

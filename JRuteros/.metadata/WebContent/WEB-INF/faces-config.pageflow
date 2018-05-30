@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf14730127804590" configfile="/JRuteros/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="login.xhtml" x="122" y="178" id="pf14747524752260" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" outlinks="pf14747524752261 pf14747524752262" inlinks="pf14747524752262" path="/login.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="backend.xhtml" x="338" y="178" id="pf14747524752263" referenceLink="//@navigationRule.2/@fromViewId|" outlinks="pf14747524752264 pf14747524752265" inlinks="pf14747524752261 pf14747524752264" path="/backend.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="register.xhtml" x="122" y="562" id="pf14747524752266" referenceLink="//@navigationRule.1/@navigationCase.1/@toViewId|" outlinks="pf14747524752277 pf14747524752278" inlinks="pf14747524752278" path="/register.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="showPassword.xhtml" x="338" y="562" id="pf14747524752279" referenceLink="//@navigationRule.1/@navigationCase.0/@toViewId|" inlinks="pf14747524752277" path="/showPassword.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="error.xhtml" x="554" y="178" id="pf147475247522710" referenceLink="//@navigationRule.2/@navigationCase.1/@toViewId|" inlinks="pf14747524752265" path="/error.xhtml"/>
+  <links id="pf14747524752261" target="pf14747524752263" source="pf14747524752260" outcome="success"/>
+  <links id="pf14747524752277" target="pf14747524752279" source="pf14747524752266" outcome="success"/>
+  <links id="pf14747524752265" target="pf147475247522710" source="pf14747524752263" outcome="failure"/>
+  <links id="pf14747524752262" target="pf14747524752260" source="pf14747524752260" outcome="failure">
+    <bendPoints d1Height="-36" d2Height="-36"/>
+    <bendPoints d1Width="-64" d1Height="-36" d2Width="-64" d2Height="-36"/>
+    <bendPoints d1Width="-64" d2Width="-64"/>
+  </links>
+  <links id="pf14747524752278" target="pf14747524752266" source="pf14747524752266" outcome="failure">
+    <bendPoints d1Height="-36" d2Height="-36"/>
+    <bendPoints d1Width="-64" d1Height="-36" d2Width="-64" d2Height="-36"/>
+    <bendPoints d1Width="-64" d2Width="-64"/>
+  </links>
+  <links id="pf14747524752264" target="pf14747524752263" source="pf14747524752263" outcome="success">
+    <bendPoints d1Height="-36" d2Height="-36"/>
+    <bendPoints d1Width="-64" d1Height="-36" d2Width="-64" d2Height="-36"/>
+    <bendPoints d1Width="-64" d2Width="-64"/>
+  </links>
+</pageflow:Pageflow>

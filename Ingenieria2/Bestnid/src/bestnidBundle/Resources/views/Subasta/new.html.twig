@@ -1,0 +1,50 @@
+{% extends 'bestnidBundle:Subasta:base.html.twig' %}
+
+{% block contenedor -%}
+<div class="panel">
+    <h3 class="highlight">Nueva subasta</h3>
+
+	{{ form_start(form) }}
+	
+	{% if form_errors(form.descripcion) %}
+		<div class="alert alert-danger" role="alert">
+		  <span class="sr-only">Error:</span>
+		  {{ form_errors(form.descripcion) }}
+		</div>
+	{% endif %}
+	{% if  form_errors(form.idCategoriaSubasta) %}
+	<div class="alert alert-danger" role="alert">
+	  <span class="sr-only">Error:</span>
+	  {{ form_errors(form.idCategoriaSubasta) }}
+	</div>
+	{% endif %}
+	{% if form_errors(form.titulo) %}
+	<div class="alert alert-danger" role="alert">
+	  <span class="sr-only">Error:</span>
+	  {{ form_errors(form.titulo) }}
+	</div>
+	{% endif %}
+	{% if form_errors(form.file) %}
+	<div class="alert alert-danger" role="alert">
+	  <span class="sr-only">Error:</span>
+	  {{ form_errors(form.file) }}
+	</div>
+	{% endif %}
+	
+	
+	
+	
+    <table class="table">
+		<tr><td>Categoria de la Subasta</td><td>{{ form_widget(form.idCategoriaSubasta) }}</td></tr>
+		<tr><td>Titulo</td><td>{{ form_widget(form.titulo) }}</td></tr>
+		<tr><td>Descripcion</td><td>{{ form_widget(form.descripcion) }}</td></tr>
+		<tr><td>Imagen de Portada</td><td>{{ form_widget(form.file) }}</td></tr>
+		<tr><td>Duracion</td><td>{{ form_widget(form.fechaVencimiento) }}</td></tr>
+
+	</table>
+	
+	{{ form_end(form)  }}
+<br>
+</div>
+
+{% endblock %}

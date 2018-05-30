@@ -1,0 +1,79 @@
+{% extends 'bestnidBundle:Subasta:base.html.twig' %}
+
+{% block ruta%}
+	<ol class="breadcrumb">
+		<li><a href="{{ path('inicio')}}">Inicio</a></li>
+		{% if Categoria.getIdPadreCategoriaSubasta != null %}
+			<li><a href="{{ path('listarSubastas',{ CategoriaURL: Categoria.getIdPadreCategoriaSubasta.getNombreUrl}) }}">{{ Categoria.getIdPadreCategoriaSubasta.descripcionCategoriaSubasta}}</a></li>
+		{% endif %}
+		<li class="active">{{ Categoria.descripcionCategoriaSubasta }}</li>
+</ol>
+{% endblock %}
+
+{% block contenedorInterno -%}
+
+	<h3 class="highlight">{{ Categoria.getDescripcionCategoriaSubasta }}</h3>
+	
+	<div class="row">
+		{% for s in entities %}
+				
+			<div class="col-sm-6 col-md-6">
+				<a href="{{ path('subasta_show', { id: s.getId }) }}">
+					<div class="thumbnail">
+						<img src="{{ asset(s.getWebPath) }}" alt="...">
+						<div class="caption">
+							<div align="center"><h3>{{ s.titulo }}</h3></div>
+							<div align="center"><p><a href="{{ path('subasta_show', { id: s.getId }) }}" class="btn btn-primary" role="button">Ver Subasta</a> <a href="{{path('oferta_new',{idSubasta: s.getId})}}" class="btn btn-success 
+							
+							{% if is_granted("IS_AUTHENTICATED_REMEMBERED") and app.user.id == s.getIdUserSubastador.getId %}
+									
+								disabled
+										
+							{% endif %}
+							
+							" role="button">Ofertar</a></p></div>
+						</div>
+					</div>
+				</a>
+			</div>
+			
+		{% endfor %}
+	</div>
+
+	<div align="center">
+		<ul class="pagination">
+
+		{% if cantidadPaginas > 0 %}
+
+			{% for i in 0..cantidadPaginas-1 %}
+				<li
+
+					{% if (i == paginaActual) %}
+
+						class="active"
+
+					{% endif %}
+
+
+				><a href="{{ path('listarSubastas', { 'CategoriaURL': CategoriaURL, 'paginaActual': i }) }}">{{ i+1 }}</a></li>
+			{% endfor %}
+
+		{% endif %}
+		</ul>
+	</div>
+
+	{% endblock %}
+	{% block categorias %}
+
+		{% for categoria in categorias %}
+
+			<li class="list-group-item"><a href="
+
+
+				{{ path('listarSubastas', {'CategoriaURL': categoria.nombreURL , 'pagina': 0}) }}
+
+				">{{ categoria.descripcionCategoriaSubasta }}</a></li>
+
+		{% endfor %}
+
+	{% endblock %}

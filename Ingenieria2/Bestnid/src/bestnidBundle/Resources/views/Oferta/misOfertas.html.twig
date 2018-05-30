@@ -1,0 +1,75 @@
+{% extends 'bestnidBundle:Default:base.html.twig' %}
+
+{% block contenedor -%}
+<div class="container">
+<ol class="breadcrumb">
+  <li><a href="{{ path('miCuenta')}} ">Mi Cuenta</a></li>
+  <li class="active">Mis Ofertas</li>
+</ol>
+<div class="panel">
+    <h3 class="highlight">Mis Ofertas</h3>
+	{% if cantidadPaginas > 0 %}
+    <table class="table">
+	
+		<tr>
+			<td colspan="2"> Subasta </td>
+			
+			<td> Razon </td>
+			
+			<td> Monto ofrecido </td>
+			
+			<td> Acciones disponibles </td>
+		
+		</tr>
+		
+		{% for oferta in ofertas %}
+		
+			<tr>
+				<td class="col-sm-1"><img width="50px" height="50px" src="{{ asset(oferta['oferta'].getSubasta.getWebPath) }}" ></td>
+				<td><a href="{{ path('subasta_show',{ id: oferta['oferta'].getSubasta.getId})}}">{{oferta['oferta'].getSubasta.getTitulo}}</a></td>
+				<td>{{oferta['oferta'].razon}}</td>
+				<td>${{oferta['oferta'].getMonto}}</td>
+				<td>
+					{% if not oferta['oferta'].getSubasta.estaFinalizada %}
+					
+						{{ form(oferta['delete_form'], {'attr': {'onclick': 'return confirm("¿Esta seguro que desea eliminar esta oferta?")'}}) }}
+					
+					{% else %}
+					
+						Finalizada
+					
+					{% endif %}
+					
+				</td>
+			</tr>
+			
+		{% endfor %}
+		
+    </table>
+	
+			<div align="center">
+			<ul class="pagination">
+				{% for i in 0..cantidadPaginas-1 %}
+					<li
+						
+						{% if (i == paginaActual) %}
+						   
+						   	class="active"
+						   
+						   {% endif %}
+						
+						
+						><a href="{{ path('ofertasUsuario', { 'paginaActual': i }) }}">{{ i+1 }}</a></li>
+				{% endfor %}
+			</ul>
+			</div>
+		{% else %}
+			
+			<div class="alert alert-warning" role="alert">En este momento no tiene ninguna oferta</div>
+			
+		{% endif %}
+
+</div>
+</ul>
+</div>
+{% endblock %}

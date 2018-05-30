@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:h="http://java.sun.com/jsf/html"
+template="/WEB-INF/facelets/templates/defaultLayout.xhtml"
+xmlns:componentes="http://java.sun.com/jsf/composite/componentes"
+xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:define name="titulo">
+Mi cuenta - JRuteros
+</ui:define>
+<ui:define name="encabezado">
+Mi cuenta
+</ui:define>
+<ui:define name="contenido">
+<div class="row">
+
+        <div class="col-md-4">
+            
+            
+            <ui:include src="/WEB-INF/sideMenu.xhtml" />
+            
+            
+        </div>
+        
+        <div class="col-md-8">
+            
+          		<h2>Bloquear usuario</h2>
+          		
+          		<form class="form-signin">
+          		<f:view>
+					<h:form id="blockForm" class="form-singin">
+					
+						<p><h:message for="blockForm" style="color: red" /></p>
+				            
+				    	<componentes:inputLabel id="usernameInput" value="#{user.blockUsername}" label="Username" />
+				
+						<br></br>
+						
+				        <h:commandButton value="Bloquear usuario" class="btn btn-lg btn-primary btn-block" action="#{user.blockUser}"/>
+				        
+					</h:form>
+				</f:view>
+          		</form>
+
+				<br></br>
+	
+				<h:dataTable value="#{userBean.usuariosBlock}" var="u" border="1">
+				
+					<h:column>
+						<f:facet name="header">
+						Username
+						</f:facet>
+						#{u.nombreUsuario}
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+						Email
+						</f:facet>
+						#{u.email}
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+						Estado
+						</f:facet>
+						#{u.habilitado}
+					</h:column>
+				
+				</h:dataTable>
+			
+        </div>
+    </div>
+</ui:define>
+</ui:composition>

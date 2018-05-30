@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:composite="http://java.sun.com/jsf/composite" >
+<!-- INTERFACE -->
+<composite:interface>
+<composite:attribute name="id"/>
+<composite:attribute name="value"/>
+<composite:attribute name="label"/>
+<composite:attribute name="styleClass" default="input" required="false"/>
+</composite:interface>
+<!-- IMPLEMENTACION -->
+<composite:implementation>
+
+<p><h:message for="#{cc.attrs.id}" style="color: red"/></p>
+<div class="container-fluid">
+	<div class="row">
+	  <div class="col-md-6"><span class="#{cc.attrs.styleClass}">#{cc.attrs.label}</span></div>
+	  <div class="col-md-6">
+	  
+	  		<h:selectOneMenu id="#{cc.attrs.id}" value="#{cc.attrs.value}">
+			   <f:selectItem itemValue="pu" itemLabel="Publico" />
+			   <f:selectItem itemValue="pr" itemLabel="Privado" />	   							
+			</h:selectOneMenu>	
+		</div>
+	</div>
+</div>
+
+
+
+
+</composite:implementation>
+</html>

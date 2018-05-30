@@ -1,0 +1,37 @@
+{% extends 'bestnidBundle:Subasta:base.html.twig' %}
+
+{% block contenedor %}  
+
+<div class="container">
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('admin')}}">Administracion</a></li>
+	  <li><a href="{{ path('configuracion') }}">Configuraciones</a></li>
+	  <li class="active">{{ entity.nombre }}</li>
+	</ol>
+	<div class="panel">
+		<div class="row">
+    		<h1>Editar configuracion</h1>
+
+    		{{ form_start(edit_form) }}
+	
+			{% if form_errors(edit_form.valor) %}
+				<div class="alert alert-danger" role="alert">
+				  <span class="sr-only">Error:</span>
+				  {{ form_errors(edit_form.valor) }}
+				</div>
+			{% endif %}
+			
+				
+			<table class="table">
+			
+				<tr>
+					<td>{{ entity.nombre }}</td>
+					<td>{{ form_widget(edit_form.valor) }}</td>
+					<td>{{ form_end(edit_form) }}</td>
+			
+			</table>
+
+		</div>
+	</div>
+</div>
+{% endblock %}

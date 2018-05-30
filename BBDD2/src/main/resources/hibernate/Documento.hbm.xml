@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="bd2.model.Documento" table="DOCUMENTO">
+		<id name="idDocumento" type="long" column="ID_DOCUMENTO" >
+			<generator class="native" />
+		</id>
+		<property name="nombre" column="nombre" type="string"/>
+		<property name="complejidad" column="complejidad" type="int"/>
+		<list name="parrafos" cascade="all" inverse="true">
+			<key column="idDocumento"/>
+			<index column="indiceListaParrafosDeDocumento"/>
+			<one-to-many class="bd2.model.Parrafo"/>
+		</list>
+		<many-to-one name="idioma" class="bd2.model.Idioma" cascade="all" column="idIdioma">  </many-to-one>
+	</class>
+</hibernate-mapping>

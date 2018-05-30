@@ -1,0 +1,44 @@
+{% extends 'bestnidBundle:Default:base.html.twig' %}
+
+{% block contenedor %}
+<ol class="breadcrumb">
+		  <li><a href="{{ path('miCuenta')}}">Mi Cuenta</a></li>
+		  <li class="active">Pagar subasta</li>
+		</ol>
+		
+<div class="panel">
+    <h3 class="highlight">Promociones con bancos</h3>
+
+	<p>Banco Provincia: 5% de descuento.</p>
+	
+	<p>Banco Nacion: 10% de descuento.</p>
+	
+</div>
+
+<div class="panel">
+    <h3 class="highlight">Pagar subasta</h3>
+
+	
+	<table class="table">
+		<tr>
+			<td>Subasta</td>
+			<td><a href="{{path('subasta_show',{'id': ofertaGanadora.subasta.getId})}}">{{ ofertaGanadora.subasta.titulo }}</td>
+		</tr>
+		<tr>
+			<td>Monto</td>
+			<td>${{ ofertaGanadora.monto }}</td>
+		</tr>
+		<tr>
+			<td>Tarjeta a utilizar</td>
+			<td>
+				{{ form_start(form) }}
+				
+				{{form_widget(form.Tarjeta)}}
+			</td>
+		</tr>
+
+	</table>
+
+	{{form_end(form)}}
+</div>
+{% endblock %}

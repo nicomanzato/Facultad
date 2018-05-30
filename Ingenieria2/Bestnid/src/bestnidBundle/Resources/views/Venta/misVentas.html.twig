@@ -1,0 +1,36 @@
+{% extends 'bestnidBundle:User:index.html.twig' %}
+
+{% block contenedorInterno %}  
+    <h3 class="highlight">Lista de mis ventas realizadas</h3>
+	
+	{% if entities|length == 0%}
+	
+		<div class="alert alert-warning" role="alert">No tiene ninguna venta realizada</div>
+	
+	{% else %}
+	
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Fecha</th>
+					<th>Titulo</th>
+					<th>Monto ofrecido</th>
+					<th>Monto ganado</th>
+					<th>Ofertas</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for entity in entities %}
+				<tr>
+					<td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
+					<td><a href="{{path('subasta_show',{id: entity.getOferta.getSubasta.getId})}}">{{ entity.getOferta.getSubasta.getTitulo }}</a></td>
+					<td>${{ entity.getOferta.getMonto }}</td>
+					<td>${{ entity.getOferta.getMonto * (1 - entity.getPorcentajeVenta) }}</td>
+					<td><a href="{{ path('subasta_ofertas_show',{ idSubasta: entity.getOferta.getSubasta.getId }) }}">Ver Ofertas</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+
+	{% endif %}
+    {% endblock %}

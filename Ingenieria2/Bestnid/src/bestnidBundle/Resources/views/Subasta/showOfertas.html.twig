@@ -1,0 +1,93 @@
+{% extends 'bestnidBundle:Subasta:base.html.twig' %}
+
+{% block contenedor-%}
+<div class="container"> 
+		<div class="panel">
+			<h3 class="highlight">Ofertas de {{ entity.titulo }}</h3>
+			{% if ofertas|length > 0 %}
+				<table class="table">
+					<thead>
+						<tr>
+							<td>Razon</td>
+							<td>Accion</td>
+						</tr>
+					</thead>
+					<tbody>
+					{% if  ((is_granted("IS_AUTHENTICATED_REMEMBERED"))  and (entity.idUserSubastador.getId() == app.security.getToken().getUser().getId())) %}
+					
+					{% if (entity.estaFinalizada and not entity.puedoElegirGanadora) and (entity.estado == 1) %}
+					
+						<div class="alert alert-warning" role="alert">
+						  Debe esperar 3 dias desde que eligio la oferta para poder reelegir una nueva oferta ganadora
+						</div>
+					
+					{% endif %}
+					
+					
+						{% for oferta in ofertas %}
+							<tr>
+								<td class="col-sm-1">{{ oferta.razon }}</td>
+								{% if entity.estaFinalizada and entity.puedoElegirGanadora %}
+								
+									<td class="col-sm-1"><a href="{{ path('oferta_ganadora',{ id: oferta.id }) }}">Elegir como ganadora</a></td>
+								
+								{% else %}
+								
+									<td class="col-sm-1">
+									
+										{% if oferta.getGanadora == 1 %}
+									
+											<div style="color:green">Ganadora</div>
+									
+										{% else %}
+										
+											-
+										
+										{% endif %}
+									
+									
+									</td>
+								
+								{% endif %}
+							</tr>
+						{% endfor %}
+					
+					{% else %}
+					
+						{% for oferta in ofertas %}
+							<tr>
+								<td class="col-sm-1">{{ oferta.razon }}</td>
+								<td class="col-sm-1">
+									
+										{% if oferta.getGanadora == 1 %}
+									
+											<div style="color:green">Ganadora</div>
+									
+										{% else %}
+										
+											-
+										
+										{% endif %}
+									
+									
+									</td>
+								
+							</tr>
+						{% endfor %}
+					
+					{% endif %}
+					
+					</tbody>
+				</table>
+			{% else %}
+			
+				<p>Por el momento no existe ninguna oferta.
+		
+				{% if  ((is_granted("IS_AUTHENTICATED_REMEMBERED"))  and (entity.idUserSubastador.getId() != app.security.getToken().getUser().getId())) %}	
+					<a href="{{ path('oferta_new', { idSubasta: entity.id }) }}"> Haz click aqui para ofertar ! </a></p>
+				{% endif %}
+			
+			{% endif %}
+	</div>
+</div>
+{% endblock %}

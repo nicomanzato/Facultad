@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="bd2.model.Curso" table="CURSO">
+		<id name="idCurso" type="long" column="ID_CURSO" >
+			<generator class="native" />
+		</id>
+		
+		<many-to-one name="idioma" class="bd2.model.Idioma" cascade="all"></many-to-one>
+		<list name="lecciones" cascade="all">
+			<key column="idCurso"/>
+			<index column="indiceListaIdiomaDeCurso"/>
+			<one-to-many class="bd2.model.Leccion"/>
+		</list>
+		<property name="nivel" column="nivel" type="int"/>
+		<property name="nombre" column="nombre" type="string"/>
+	</class>
+</hibernate-mapping>

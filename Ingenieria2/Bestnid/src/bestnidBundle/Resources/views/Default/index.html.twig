@@ -1,0 +1,45 @@
+{% extends 'bestnidBundle:Subasta:base.html.twig' %}
+
+{% block contenedorInterno %}  
+	<div class="row panel">
+    	<h3 class="highlight">Lo mas nuevo</h3>
+              
+        <div class="row">
+        	{% for s in UltimasSubastas %}
+			
+				<div class="col-sm-6 col-md-6">
+					<a href="{{ path('subasta_show', { id: s.getId }) }}">
+						<div class="thumbnail">
+							<img src="{{ asset(s.getWebPath) }}" alt="...">
+							<div class="caption">
+								<div align="center"><h3>{{ s.titulo }}</h3></div>
+								<div align="center"><p><a href="{{ path('subasta_show', { id: s.getId }) }}" class="btn btn-primary" role="button">Ver Subasta</a> <a href="{{path('oferta_new',{idSubasta: s.getId})}}" class="btn btn-success
+								
+									{% if is_granted("IS_AUTHENTICATED_REMEMBERED") and app.user.id == s.getIdUserSubastador.getId %}
+									
+										disabled
+										
+									{% endif %}
+									
+								" role="button">Ofertar</a></p></div>
+							</div>
+						</div>
+					</a>
+				</div>
+			
+			{% endfor %}
+		</div>      	
+		
+	</div> 
+{% endblock %}
+
+{% block categorias %}
+					
+			{% for Categoria in CategoriaSubastas %}
+
+				 <li class="list-group-item"><a href="{{ path('listarCategoriaSubasta', {'id': Categoria.nombreURL}) }}">{{ Categoria.descripcionCategoriaSubasta }}</a></li>
+
+			{% endfor %}
+				
+				
+{% endblock %}

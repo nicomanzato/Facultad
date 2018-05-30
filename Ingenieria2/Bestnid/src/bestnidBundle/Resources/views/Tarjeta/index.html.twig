@@ -1,0 +1,49 @@
+{% extends 'bestnidBundle:Default:base.html.twig' %}
+
+{% block contenedor %}
+<ol class="breadcrumb">
+		  <li><a href="{{ path('miCuenta')}}">Mi Cuenta</a></li>
+		  <li class="active">Mis Tarjetas Asociadas</li>
+		</ol>
+<div class="panel">
+    <h3 class="highlight">Mis Tarjetas Asociadas</h3>
+
+	<div align="center">
+		<a href="{{ path('tarjeta_new') }}">
+			<button class="btn btn-primary"> Añadir nueva Tarjeta </button>
+		</a>
+	</div>
+	<br>
+	{% if entities|length == 0 %}
+	
+		<div class="alert alert-warning" role="alert">
+		  No tiene ninguna tarjeta asociada
+		</div>
+	
+	{% else %}
+			
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Numero</th>
+					<th>Codigo</th>
+					<th>Nombre</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for entity in entities %}
+				<tr>
+					<td>{{ entity.numero }}</td>
+					<td>{{ entity.codigo }}</td>
+					<td>{{ entity.nombre }}</td>
+					<td>
+						<a href="{{ path('tarjeta_edit', { 'id': entity.id }) }}">Modificar</a>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+</div>
+    {% endblock %}

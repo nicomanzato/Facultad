@@ -1,0 +1,28 @@
+{% extends 'bestnidBundle:CategoriaSubasta:base.html.twig' %}
+
+{% block contenedor -%}
+	<div class="container"> 
+		<div class="row col col-md-12">
+			<ul class="list-group menuVertical">
+				<li class="list-group-item"><h3 class="highlight" >{{ CategoriaSubasta.descripcionCategoriaSubasta }}</h3></li>
+			</ul>
+		</div>
+		<div class="row">
+			{% for CategoriaInterna in CategoriasInternas %}
+			<div class="col col-md-3">
+				<ul class="list-group menuVertical">
+					<li class="list-group-item">
+						<a href="{{ path('listarCategoriaSubasta', {'id': CategoriaInterna['cat'].nombreURL}) }}">
+							<h3 class="highlight">{{ CategoriaInterna['cat'].getDescripcionCategoriaSubasta }}</h3>
+						</a>
+					</li>
+					{% for CategoriaHija in CategoriaInterna['hijas'] %}
+						<li class="list-group-item"><a href="{{ path('listarCategoriaSubasta', {'id': CategoriaHija.nombreURL}) }}">{{ CategoriaHija.getDescripcionCategoriaSubasta }}</a></li>
+					{% endfor %}
+				</ul>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+
+{% endblock %}

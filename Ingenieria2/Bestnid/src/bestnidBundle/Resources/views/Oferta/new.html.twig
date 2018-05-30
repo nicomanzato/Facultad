@@ -1,0 +1,31 @@
+{% extends 'bestnidBundle:Default:base.html.twig' %}
+
+{% block contenedor -%}
+<div class="panel">
+
+	<h3 class="highlight">Nueva Oferta</h3>
+	
+	
+
+	{{  form_start(form) }}
+	
+	{% if form_errors(form.monto) %}
+		<div class="alert alert-danger" role="alert">
+		  <span class="sr-only">Error:</span>
+		  {{ form_errors(form.monto) }}
+		</div>
+	{% endif %}
+	{% if  form_errors(form.razon) %}
+	<div class="alert alert-danger" role="alert">
+	  <span class="sr-only">Error:</span>
+	  {{ form_errors(form.razon) }}
+	</div>
+	{% endif %}
+	
+    <table class="table">
+		<tr><td>Monto a pagar</td><td>{{ form_widget(form.monto) }}</td></tr>
+		<tr><td>Razon por la cual necesita el producto</td><td>{{ form_widget(form.razon) }}</td></tr>
+	</table>
+	{{ form_end(form) }}
+</div>
+{% endblock %}

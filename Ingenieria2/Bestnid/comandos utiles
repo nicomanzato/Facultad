@@ -1,0 +1,15 @@
+generar getters y setters de entidades
+
+php app/console doctrine:generate:entities AppBundle/Entity/Product
+
+generar la table de la base de datos
+
+php app/console doctrine:schema:update --force
+
+generar form de una entidad
+
+php app/console generate:doctrine:form AcmeBlogBundle:Post
+
+promote user 
+
+php app/console fos:user:promote nicolas ROLE_ADMIN

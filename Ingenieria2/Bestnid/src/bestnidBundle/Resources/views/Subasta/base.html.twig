@@ -1,0 +1,25 @@
+{% extends 'bestnidBundle:Default:base.html.twig' %}
+{% block contenedor %}  
+	<div class="container"> 
+		{% block ruta %}
+		{% endblock %}
+		<div class="row">
+			<div class="col col-sm-3 menuVertical">
+				<ul class="list-group">
+					<li class="list-group-item"><h3 class="highlight">Categorias</h3></li>
+					{% block categorias %}
+					<li class="list-group-item"><p>Por ahora no hay categorias</p></li>
+					{% endblock %}
+				</ul>
+			</div>
+			<div class="col col-sm-9">
+				<div class="panel">
+					{% block contenedorInterno %}
+
+					{% endblock %}
+				</div> 
+		
+			</div> 
+		</div>
+	</div>
+{% endblock %}

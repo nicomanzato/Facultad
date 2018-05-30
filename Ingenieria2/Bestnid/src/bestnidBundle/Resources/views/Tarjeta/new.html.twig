@@ -1,0 +1,56 @@
+{% extends 'bestnidBundle:Default:base.html.twig' %}
+
+{% block contenedor %}
+<ol class="breadcrumb">
+		  <li><a href="{{ path('miCuenta')}}">Mi Cuenta</a></li>
+		  <li><a href="{{ path('tarjeta')}}">Mis Tarjetas Asociadas</a></li>
+		  <li class="active">Añadir nueva tarjeta</li>
+		</ol>
+<div class="panel">
+    <h3 class="highlight">Añadir nueva Tarjeta</h3>
+	
+	{{ form_start(form) }}
+	
+	
+	
+	
+	
+	<table class="table">
+		<tr><td>Nombre del Titular</td><td>{{ form_widget(form.nombre) }}
+		
+			{% if form_errors(form.nombre) %}
+				<div class="alert alert-danger" role="alert">
+				  <span class="sr-only">Error:</span>
+				  {{ form_errors(form.nombre) }}
+				</div>
+			
+				</td></tr>
+			{% endif %}
+		<tr><td>Numero de tarjeta</td><td>{{ form_widget(form.numero) }}
+			
+			{% if form_errors(form.numero) %}
+				<div class="alert alert-danger" role="alert">
+				  <span class="sr-only">Error:</span>
+				  {{ form_errors(form.numero) }}
+				</div>
+			{% endif %}
+		
+		</td></tr>
+		
+		<tr><td>Codigo de tarjeta (3 digitos)</td><td>{{ form_widget(form.codigo) }}
+		
+			{% if form_errors(form.codigo) %}
+				<div class="alert alert-danger" role="alert">
+				  <span class="sr-only">Error:</span>
+				  {{ form_errors(form.codigo) }}
+				</div>
+			{% endif %}
+		
+		</td></tr>
+
+	</table>
+	
+	{{ form_end(form)  }}
+
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+<ui:composition 
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:f="http://xmlns.jcp.org/jsf/core"
+xmlns:h="http://xmlns.jcp.org/jsf/html"
+xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<!-- It can be fixed with bootstrap affix http://getbootstrap.com/javascript/#affix-->
+	<div id="sidebar" class="well sidebar-nav">
+	
+		<h5><i class="glyphicon glyphicon-home"></i>
+        	<small><b>Rutas</b></small>
+        </h5>
+        <ul class="nav nav-pills nav-stacked">
+        	<li><a href="#">Ver Mis Rutas</a></li>
+            <li><a href="createRuta.xhtml">Crear ruta nueva</a></li>
+        </ul>
+        
+    	<h5><i class="glyphicon glyphicon-home"></i>
+        	<small><b>Mi Cuenta</b></small>
+        </h5>
+        <ul class="nav nav-pills nav-stacked">
+        	<li><a href="backend.xhtml">Informacion Personal</a></li>
+            <li><a href="changePassword.xhtml">Cambiar Contrasena</a></li>
+        </ul>
+        <c:if test="#{user.admin == true}">
+        	<h5><i class="glyphicon glyphicon-home"></i>
+               	<small><b>Administrador</b></small>
+            </h5>
+	        <ul class="nav nav-pills nav-stacked">
+	        	<li><a href="blockUser.xhtml">Bloquear usuario</a></li>
+	       	</ul>
+	   	</c:if>
+	</div>
+</ui:composition>

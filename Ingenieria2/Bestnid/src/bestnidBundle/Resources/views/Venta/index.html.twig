@@ -1,0 +1,32 @@
+{% extends 'bestnidBundle:User:index.html.twig' %}
+
+{% block contenedorInterno %}  
+    <h3 class="highlight">Lista de mis compras realizadas</h3>
+	
+	{% if entities|length == 0%}
+	
+		<div class="alert alert-warning" role="alert">No tiene ninguna compra realizada</div>
+	
+	{% else %}
+	
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Fecha</th>
+					<th>Titulo</th>
+					<th>Monto Pagado</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for entity in entities %}
+				<tr>
+					<td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
+					<td><a href="{{path('subasta_show',{id: entity.getOferta.getSubasta.getId})}}">{{ entity.getOferta.getSubasta.getTitulo }}</a></td>
+					<td>${{ entity.getOferta.getMonto }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+
+	{% endif %}
+    {% endblock %}

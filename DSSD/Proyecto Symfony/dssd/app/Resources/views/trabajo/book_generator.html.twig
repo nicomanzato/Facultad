@@ -1,0 +1,38 @@
+{% block body %}
+    <h1>Libro de Resumenes</h1>
+
+    <h2> Indice </h2>
+
+    {% set numeroDeTrabajo = 1 %}
+
+    {%  for trabajo in trabajos %}
+
+        <b> Trabajo Nro {{ numeroDeTrabajo }}: {{ trabajo.titulo }} </b> <br>
+
+        {{ trabajo.autor.apellido }} {{ trabajo.autor.nombre}} <br>
+
+        {% set numeroDeTrabajo = numeroDeTrabajo + 1 %}
+
+    {% endfor %}
+
+
+    <h2> Resumenes! </h2> 
+
+    {% set numeroDeTrabajo = 1 %}
+
+    {%  for trabajo in trabajos %}
+
+        <b> Trabajo Nro {{ numeroDeTrabajo }}: {{ trabajo.titulo }} </b> <br>
+
+        {{ trabajo.autor.apellido }} {{ trabajo.autor.nombre}} <br>
+
+        {{ trabajo.resumen}} <br>
+
+        Exposicion: {{trabajo.exposicionLugar}}: {{ trabajo.exposicionDia | date("Y/M/d") }}<br>
+
+        {% set numeroDeTrabajo = numeroDeTrabajo + 1 %}
+
+    {% endfor %}
+
+
+{% endblock %}

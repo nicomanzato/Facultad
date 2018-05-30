@@ -1,0 +1,59 @@
+{% extends 'bestnidBundle:CategoriaSubasta:base.html.twig' %}
+
+{% block contenedor -%}
+<ol class="breadcrumb">
+  <li><a href="{{ path('admin')}}">Administracion</a></li>
+  <li><a href="{{ path('categoriasubasta')}}">Categoria de Subastas</a></li>
+  <li class="active">Agregar</li>
+</ol>
+<div class="row panel">
+	
+	<div class="col col-sm-12">
+		<h3 class="highlight">Crear nueva Categoria para las Subastas</h3>
+
+		{{ form_start(form) }}
+		
+		{% if form_errors(form.descripcionCategoriaSubasta) %}
+		<div class="alert alert-danger" role="alert">
+		  <span class="sr-only">Error:</span>
+		  {{ form_errors(form.descripcionCategoriaSubasta) }}
+		</div>
+		{% endif %}
+		{% if  form_errors(form.idPadreCategoriaSubasta) %}
+		<div class="alert alert-danger" role="alert">
+		  <span class="sr-only">Error:</span>
+		  {{ form_errors(form.idPadreCategoriaSubasta) }}
+		</div>
+		{% endif %}
+		{% if form_errors(form.nombreURL) %}
+		<div class="alert alert-danger" role="alert">
+		  <span class="sr-only">Error:</span>
+		  {{ form_errors(form.nombreURL) }}
+		</div>
+		{% endif %}
+		{% if msg == 1 %}
+		
+		<div class="alert alert-danger" role="alert">
+		  <span class="sr-only">Error:</span>
+		  La categoria ya existe
+		</div>
+		
+		{% endif %}
+		
+		<table class="table">
+			<tr><td>Nombre de la categoria</td><td>{{ form_widget(form.descripcionCategoriaSubasta) }}</td></tr>
+			<tr><td>Categoria en la que esta contenida*</td><td>{{ form_widget(form.idPadreCategoriaSubasta) }}</td></tr>
+			<tr><td>Nombre que se usara en la URL</td><td>{{ form_widget(form.nombreURL) }}</td></tr>
+
+		</table>
+		
+		<div class="col-sm-4">{{ form_widget(form.submit) }}</div>
+		
+		{{ form_end(form)  }}	
+	
+	</div>
+	<br>
+	<p>*Si usted no define una categoria, se definira la misma como una categoria padre</p>
+	
+</div>
+{% endblock %}

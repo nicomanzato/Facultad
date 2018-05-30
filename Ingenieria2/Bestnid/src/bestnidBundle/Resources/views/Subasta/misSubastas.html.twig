@@ -1,0 +1,91 @@
+{% extends 'bestnidBundle:Subasta:base.html.twig' %}
+
+{% block contenedor-%}
+<div class="container"> 
+		<ol class="breadcrumb">
+		  <li><a href="{{ path('miCuenta')}}">Mi Cuenta</a></li>
+		  <li class="active">Mis Subastas</li>
+	</ol>
+		<div class="panel">
+			<h3 class="highlight">Mis Subastas</h3>
+			
+			{% if msg == 1 %}
+			
+				<div class="alert alert-success" role="alert">La subasta ha sido finalizada con exito</div>
+			 
+			{% endif %}
+			
+			{% if msg == 2 %}
+			
+				<div class="alert alert-success" role="alert">La subasta ha sido eliminada con exito</div>
+			 
+			{% endif %}
+			
+			<table class="table">
+
+				{% for entity in entities %}
+					<tr>
+						<td>
+						
+							{% if entity.estaFinalizada %}
+
+								{% if entity.estado == 1%}
+									
+									<span class="glyphicon glyphicon-exclamation-sign" style="color:red" aria-hidden="true"></span> </td>
+								
+								{% else %}
+								
+									<span class="glyphicon glyphicon-lock" style="color:grey" aria-hidden="true"></span> </td>
+								
+								{% endif %}
+								
+							{% else %}
+							
+								<span class="glyphicon glyphicon-ok" style="color:green" aria-hidden="true"></span> </td>
+								
+							{% endif%}
+						<td class="col-sm-1"><img width="50px" height="50px" src="{{ asset(entity.getWebPath) }}" ></td>
+						<td class="col-sm-8"><a href="{{ path('subasta_show', { 'id': entity.id }) }}">{{ entity.titulo }}</a></td>
+						<td class="col-sm-1"><a href="{{ path('subasta_edit', { 'id': entity.id }) }}">Editar</a></td>
+						<td class="col-sm-1"><a href="{{ path('subasta_ofertas_show', {idSubasta: entity.id}) }}">Ver Ofertas</td>
+						<td class="col-sm-1">
+						
+							{% if entity.estaFinalizada %}
+								
+								Finalizada
+								
+							{% else %}
+							
+								<a href="{{ path('subasta_finalizar', {idSubasta: entity.id}) }}">Finalizar</a>
+							
+							{% endif %}
+						</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		{% if cantidadPaginas > 0 %}
+			<div align="center">
+			<ul class="pagination">
+				{% for i in 0..cantidadPaginas-1 %}
+					<li
+						
+						{% if (i == paginaActual) %}
+						   
+						   	class="active"
+						   
+						   {% endif %}
+						
+						
+						><a href="{{ path('subastasUsuario', { 'paginaActual': i }) }}">{{ i+1 }}</a></li>
+				{% endfor %}
+			</ul>
+			</div>
+		{% else %}
+			
+			<div class="alert alert-warning" role="alert">En este momento no tiene ninguna subasta</div>
+			
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

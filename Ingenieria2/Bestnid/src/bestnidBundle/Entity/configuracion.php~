@@ -1,0 +1,43 @@
+<?php
+namespace bestnidBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="Configuracion")
+ */
+
+class configuracion{
+
+	/**
+	* @ORM\Column(type="integer")
+	* @ORM\Id
+	* @ORM\GeneratedValue(strategy="AUTO")
+	*/
+	protected $id;
+	 
+	/**
+	* @ORM\Column(type="string", length=70)
+	* @Assert\Length(
+     *      min = 5,
+     *      max = 30,
+     *      minMessage = "El nombre debe tener al menos {{ limit }} caracteres",
+     *      maxMessage = "El nombre no puede tener mas de {{ limit }} caracteres"
+     * )
+	*/
+	protected $nombre;
+	/**
+	* @ORM\Column(type="string", length=10)
+	* @Assert\Length(
+     *      min = 0,
+     *      max = 300,
+     *      minMessage = "El valor debe tener al menos {{ limit }} caracteres",
+     *      maxMessage = "El valor no puede tener mas de {{ limit }} caracteres"
+     * )
+	*/
+	protected $valor;
+	
+}

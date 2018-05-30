@@ -1,0 +1,37 @@
+{% extends 'bestnidBundle:Subasta:base.html.twig' %}
+
+{% block contenedor %}  
+	
+	<div class="container">
+	
+		<ol class="breadcrumb">
+			<li><a href="{{ path('admin')}}">Administracion</a></li>
+			<li class="active">Ganacias entre fechas</li>
+		</ol>
+		
+		<div class="panel">
+			
+			<h3 class="highlight"> Ganacias entre {{ fechaInicio }} y {{ fechaFin }}</h3>
+			
+			<div class="alert alert-success" role="alert">La ganancia fue de ${{ gananciaTotal }}</div>
+				
+				
+			<table class="table">
+				<tr>
+					<td>Nombre de Subasta</td>
+					<td>Fecha de venta</td>
+					<td>Monto Ganado</td>
+				</tr>
+			{% for v in ventas %}
+				<tr>
+					<td><a href="{{ path('subasta_show',{ id: v.getOferta.getSubasta.getId }) }}">{{ v.getOferta.getSubasta.getTitulo }}</a></td>
+					<td>{{ v.fecha|date('Y-m-d') }}</td>
+					<td>{{ v.getOferta.getMonto * v.porcentajeVenta }}</td>
+				</tr>
+			{% endfor %}
+			</table>
+		</div>
+	
+	</div>
+	
+{% endblock %}

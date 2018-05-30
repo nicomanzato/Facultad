@@ -1,0 +1,79 @@
+{% extends 'bestnidBundle:Subasta:base.html.twig' %}
+
+{% block contenedor %}  
+
+<div class="container">
+	<ol class="breadcrumb">
+	 <li><a href="{{ path('admin')}}">Administracion</a></li>
+	</ol>
+	<div class="panel">
+		<div class="row">
+				
+				<div class="col col-sm-12">
+						<a href="{{ path('categoriasubasta') }}">
+							<div class="col-sm-6 panel">
+								<h3 class="highlight">Categoria de Subastas</h3>
+
+								<p>Haz click aqui para administrar las categorias de las subastas</p>
+							</div>
+						</a>
+					
+						<a href="{{ path('contacto') }}">
+							<div class="col-sm-6 panel pull-right">
+								<h3 class="highlight">Contactos de usuario</h3>
+
+								<p>Haz click aqui para administrar los contactos de usuario</p>
+							</div>
+						</a>
+			</div> 
+			<div class="col col-sm-12">
+				<div class="col-sm-6 panel">
+					<h3 class="highlight">Suspender usuario</h3>
+
+						{% if msg == 1 %}
+			
+							<div class="alert alert-success" role="alert">El usuario ha sido suspendido</div>
+
+						{% endif %}
+					
+						{% if msg == 2 %}
+			
+							<div class="alert alert-danger" role="alert">El usuario no existe</div>
+
+						{% endif %}
+						<div class="col col-sm-12">
+							<form action="{{ path('suspender_usuario') }}" class="navbar-form navbar-left" role="search" method="POST">
+							  <div class="form-group">
+								<input type="text" class="form-control" placeholder="Ingresar nombre de usuario" name="user">
+							  </div>
+							  <button type="submit" class="btn btn-default">Suspender</button>
+							</form>
+						</div>
+				</div>
+					
+				<a href="{{ path('configuracion') }}">
+					<div class="col-sm-6 panel pull-right">
+						<h3 class="highlight">Configuraciones</h3>
+
+						<p>Haz click aqui para administrar los contactos de usuario</p>
+					</div>
+				</a>
+			</div>
+			<div class="col col-sm-6 panel">
+			
+					<h3 class="highlight">Ganancias entre fechas</h3>
+			
+					<form action="{{ path('ganancias') }}" class="navbar-form navbar-left" role="search" method="GET">
+					
+						<input type="date" class="form-control" name="fechaInicio">
+						
+						<input type="date" class="form-control" name="fechaFin">
+						
+						<button type="submit" class="btn btn-default">Calcular</button>
+					</form>
+			
+			</div>
+			
+	</div>
+</div>
+{% endblock %}

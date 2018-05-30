@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="bd2.model.Tarea" table="TAREA">
+		<id name="idTarea" type="long" column="ID_TAREA" >
+			<generator class="native" />
+		</id>
+		<discriminator column="DISCRIMINATOR" type="string"/>
+		<property name="fecha" column="fecha" type="date"/>
+		<property name="descripcion" column="descripcion" type="text"/>
+		<property name="completa" column="completa" type="boolean"/>
+		
+		<subclass name="bd2.model.Traduccion" extends="Tarea" discriminator-value="TC">
+			<property name="texto" column="texto" type="text"></property>
+			<many-to-one name="parrafo" class="bd2.model.Parrafo" cascade="all"></many-to-one>
+			<many-to-one name="idioma" class="bd2.model.Idioma" cascade="all"></many-to-one>
+		</subclass>
+		
+		<subclass name="bd2.model.Evaluacion" extends="Tarea" discriminator-value="EV">
+			<property name="puntaje" column="puntaje" type="int"></property>
+			<many-to-one name="traduccion" class="bd2.model.Traduccion" cascade="all"></many-to-one>
+		</subclass>
+		  
+	</class>
+</hibernate-mapping>

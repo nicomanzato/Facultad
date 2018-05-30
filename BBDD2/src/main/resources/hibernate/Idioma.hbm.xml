@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="bd2.model.Idioma" table="IDIOMA">
+		<id name="idIdioma" type="long" column="ID_IDIOMA" >
+			<generator class="native" />
+		</id>
+		<property name="nombre" column="nombre" type="string"/>
+		
+		<many-to-one name="diccionario" class="bd2.model.Diccionario" cascade="all" column="idDiccionario"></many-to-one> 
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,37 @@
+{% extends 'bestnidBundle:Default:base.html.twig' %}
+
+{% block contenedor -%}
+<div class="row panel">
+    <h3 class="highlight">Contacto con el administrador</h3>
+
+    {{ form_start(form) }}
+	
+	{% if form_errors(form.asunto) %}
+		<div class="alert alert-danger" role="alert">
+		  <span class="sr-only">Error:</span>
+		  {{ form_errors(form.asunto) }}
+		</div>
+		{% endif %}
+		{% if  form_errors(form.comentario) %}
+		<div class="alert alert-danger" role="alert">
+		  <span class="sr-only">Error:</span>
+		  {{ form_errors(form.comentario) }}
+		</div>
+		{% endif %}
+		{% if form_errors(form.mail) %}
+		<div class="alert alert-danger" role="alert">
+		  <span class="sr-only">Error:</span>
+		  {{ form_errors(form.mail) }}
+		</div>
+		{% endif %}
+	
+    <table class="table">
+		<tr><td>Asunto</td><td>{{ form_widget(form.asunto) }}</td></tr>
+		<tr><td>Descripcion de la situacion</td><td>{{ form_widget(form.comentario) }}</td></tr>
+		<tr><td>E-mail de contacto</td><td>{{ form_widget(form.mail) }}</td></tr>
+
+	</table>
+	<div class="col-sm-4">{{ form_end(form)  }}</div>
+
+</div>
+{% endblock %}

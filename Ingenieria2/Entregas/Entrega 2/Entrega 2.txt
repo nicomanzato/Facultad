@@ -1,0 +1,6 @@
+Entrega 2:
+
+Pila de Producto: https://www.pivotaltracker.com/n/projects/1314102
+
+Diagrama entidad-relacion: https://github.com/darkniking93/Ingenieria2/blob/master/Entrega%202/der.pdf
+ 

@@ -1,0 +1,37 @@
+{% extends 'bestnidBundle:Subasta:base.html.twig' %}
+
+{% block contenedor %}  
+
+<div class="container">
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('admin')}}">Administracion</a></li>
+	  <li class="active">Configuraciones</li>
+	</ol>
+	<div class="panel">
+		<div class="row">
+			<h3 class="highlight">Listado de configuraciones</h3>
+
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Nombre</th>
+						<th>Valor</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for entity in entities %}
+					<tr>
+						<td><a href="{{ path('configuracion_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+						<td>{{ entity.nombre }}</td>
+						<td>{{ entity.valor }}</td>
+						<td><a href="{{ path('configuracion_edit', { 'id': entity.id }) }}">edit</a></td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+</div>
+{% endblock %}

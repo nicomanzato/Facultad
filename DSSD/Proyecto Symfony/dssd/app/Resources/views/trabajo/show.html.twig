@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Trabajo</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ trabajo.id }}</td>
+            </tr>
+            <tr>
+                <th>Titulo</th>
+                <td>{{ trabajo.titulo }}</td>
+            </tr>
+            <tr>
+                <th>Resumen</th>
+                <td>{{ trabajo.resumen }}</td>
+            </tr>
+            <tr>
+                <th>Tema</th>
+                <td>{{ trabajo.tema }}</td>
+            </tr>
+            <tr>
+                <th>Tipopresentacion</th>
+                <td>{{ trabajo.tipoPresentacion }}</td>
+            </tr>
+            <tr>
+                <th>Aprobado</th>
+                <td>{% if trabajo.aprobado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Asignado</th>
+                <td>{% if trabajo.asignado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Finalizado</th>
+                <td>{% if trabajo.finalizado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Idgoogledrivefile</th>
+                <td>{{ trabajo.idGoogleDriveFile }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('trabajo_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('trabajo_edit', { 'id': trabajo.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

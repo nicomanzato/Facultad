@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="bd2.model.Parrafo" table="PARRAFO">
+		<id name="idParrafo" type="long" column="ID_PARRAFO" >
+			<generator class="native" />
+		</id>
+		<!-- <property name="texto" column="texto" type="string"/>  -->
+		<property name="texto" type="text" length="4000">
+        </property>
+		<many-to-one name="documento" class="bd2.model.Documento" cascade="all" column="idDocumento"></many-to-one>
+	</class>
+</hibernate-mapping>

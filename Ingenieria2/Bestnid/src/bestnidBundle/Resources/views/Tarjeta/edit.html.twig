@@ -1,0 +1,54 @@
+{% extends 'bestnidBundle:Subasta:base.html.twig' %}
+
+{% block contenedor -%}
+<ol class="breadcrumb">
+		  <li><a href="{{ path('miCuenta')}}">Mi Cuenta</a></li>
+		  <li><a href="{{ path('tarjeta')}}">Mis Tarjetas Asociadas</a></li>
+		  <li class="active">Modificar tarjeta asociada</li>
+		</ol>
+<div class="panel">
+    <h3 class="highlight">Editar Tarjeta asociada</h1>
+
+	{{ form_start(edit_form) }}
+    <table class="table">
+		<tr><td>Nombre del Titular</td><td>{{ form_widget(edit_form.nombre) }}
+		
+			{% if form_errors(edit_form.nombre) %}
+				<div class="alert alert-danger" role="alert">
+				  <span class="sr-only">Error:</span>
+				  {{ form_errors(edit_form.nombre) }}
+				</div>
+			
+				</td></tr>
+			{% endif %}
+		<tr><td>Numero de tarjeta</td><td>{{ form_widget(edit_form.numero) }}
+			
+			{% if form_errors(edit_form.numero) %}
+				<div class="alert alert-danger" role="alert">
+				  <span class="sr-only">Error:</span>
+				  {{ form_errors(edit_form.numero) }}
+				</div>
+			{% endif %}
+		
+		</td></tr>
+		
+		<tr><td>Codigo de tarjeta (3 digitos)</td><td>{{ form_widget(edit_form.codigo) }}
+		
+			{% if form_errors(edit_form.codigo) %}
+				<div class="alert alert-danger" role="alert">
+				  <span class="sr-only">Error:</span>
+				  {{ form_errors(edit_form.codigo) }}
+				</div>
+			{% endif %}
+		
+		</td></tr>
+
+	</table>
+
+	<div class="row">
+		<div class="col-sm-4">{{ form_end(edit_form)  }}</div>
+		<div class="col-sm-4 pull-right">{{ form(delete_form, {'attr': {'onclick': 'return confirm("¿Esta seguro que desea eliminar la subasta?")'}}) }}</div>
+</div>
+</ul>
+</div>
+{% endblock %}

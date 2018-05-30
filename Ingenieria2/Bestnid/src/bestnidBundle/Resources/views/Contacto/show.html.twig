@@ -1,0 +1,32 @@
+{% extends 'bestnidBundle:Default:base.html.twig' %}
+
+{% block contenedor -%}
+<ol class="breadcrumb">
+  <li><a href="{{ path('admin')}}">Administracion</a></li>
+  <li><a href="{{ path('contacto')}}">Contacto</a></li>
+  <li class="active">Mostrar</li>
+</ol>
+<div class="panel row">
+	
+    <h3 class="highlight">Contacto Nro {{ entity.id }}</h3>
+
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Asunto</th>
+                <td>{{ entity.asunto }}</td>
+            </tr>
+            <tr>
+                <th>Comentario</th>
+                <td>{{ entity.comentario }}</td>
+            </tr>
+            <tr>
+                <th>Mail</th>
+                <td>{{ entity.mail }}</td>
+            </tr>
+        </tbody>
+    </table>
+	<div class="pull-right">{{ form(delete_form, {'attr': {'onclick': 'return confirm("¿Esta seguro que desea eliminar el contacto?")'}}) }}</div>
+	
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Trabajos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titulo</th>
+                <th>Resumen</th>
+                <th>Tema</th>
+                <th>Tipopresentacion</th>
+                <th>Aprobado</th>
+                <th>Asignado</th>
+                <th>Finalizado</th>
+                <th>Idgoogledrivefile</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for trabajo in trabajos %}
+            <tr>
+                <td><a href="{{ path('trabajo_show', { 'id': trabajo.id }) }}">{{ trabajo.id }}</a></td>
+                <td>{{ trabajo.titulo }}</td>
+                <td>{{ trabajo.resumen }}</td>
+                <td>{{ trabajo.tema }}</td>
+                <td>{{ trabajo.tipoPresentacion }}</td>
+                <td>{% if trabajo.aprobado %}Yes{% else %}No{% endif %}</td>
+                <td>{% if trabajo.asignado %}Yes{% else %}No{% endif %}</td>
+                <td>{% if trabajo.finalizado %}Yes{% else %}No{% endif %}</td>
+                <td>{{ trabajo.idGoogleDriveFile }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('trabajo_show', { 'id': trabajo.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('trabajo_edit', { 'id': trabajo.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('trabajo_new') }}">Create a new trabajo</a>
+        </li>
+    </ul>
+{% endblock %}

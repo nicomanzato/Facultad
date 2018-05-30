@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+ "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+ "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.dialect">
+			org.hibernate.dialect.MySQLDialect
+		</property>
+		<property name="hibernate.connection.driver_class">
+			com.mysql.jdbc.Driver
+		</property>
+
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/grupo11</property>
+		<property name="hibernate.connection.username">grupo11</property>
+		<property name="hibernate.connection.password">grupo11</property>
+		
+		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.format_sql">
+			true
+		</property>
+
+		<!-- Colocar las referencias a los archivos de mapping en este punto -->
+		
+		<mapping resource="hibernate/Cursada.hbm.xml"/>
+		<mapping resource="hibernate/Prueba.hbm.xml"/>
+		<mapping resource="hibernate/Curso.hbm.xml"/>
+		<mapping resource="hibernate/Usuario.hbm.xml"/>
+		<mapping resource="hibernate/Tarea.hbm.xml"/>
+		<mapping resource="hibernate/Parrafo.hbm.xml"/>
+		<mapping resource="hibernate/Documento.hbm.xml"/>
+		<mapping resource="hibernate/Idioma.hbm.xml"/>
+		
+		
+		<mapping resource="hibernate/Diccionario.hbm.xml"/>
+		
+		
+		<mapping resource="hibernate/Leccion.hbm.xml"/>
+		<mapping resource="hibernate/Sitio.hbm.xml"/>
+		
+		
+		 
+	</session-factory>
+</hibernate-configuration>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="bd2.model.Usuario" table="USUARIO" discriminator-value="U">
+		<id name="idUsuario" type="long" column="ID_USUARIO" >
+			<generator class="native" />
+		</id>
+		
+		<property name="email" column="email" type="string"></property>
+		<property name="nombre" column="nombre" type="string"></property>
+		<property name="fechaDeCreacion" column="fecha_de_creacion" type="date"></property>
+		
+		<list name="traducciones" cascade="all">
+			<key column="idUsuario"/>
+			<index column="indiceListaTraduccionesDeUsuario"/>
+			<one-to-many class="bd2.model.Traduccion"/>
+		</list>
+		
+		<list name="cursadasRealizadas" cascade="all">
+			<key column="idUsuario"/>
+			<index column="indiceListaCursadasRealizadasDeUsuario"/>
+			<one-to-many class="bd2.model.Cursada"/>
+		</list>
+		
+		<joined-subclass name="bd2.model.Moderador" table="MODERADOR">
+		
+			<key column="ID_USUARIO"/>
+			<list name="idiomas" cascade="all">
+				<key column="idModerador"/>
+				<index column="indiceListaIdiomasDeModerador"/>
+				<many-to-many class="bd2.model.Idioma"></many-to-many>
+			</list>
+			<list name="evaluaciones" cascade="all">
+				<key column="idModerador"></key>
+				<index column="indiceListaEvaluacionesDeModerador"></index>
+				<one-to-many class="bd2.model.Evaluacion"></one-to-many>
+			</list>
+			
+		</joined-subclass>
+		
+	</class>
+</hibernate-mapping>

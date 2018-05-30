@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Exposicions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Lugar</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for exposicion in exposicions %}
+            <tr>
+                <td><a href="{{ path('exposicion_show', { 'id': exposicion.id }) }}">{{ exposicion.id }}</a></td>
+                <td>{% if exposicion.fecha %}{{ exposicion.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ exposicion.lugar }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('exposicion_show', { 'id': exposicion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('exposicion_edit', { 'id': exposicion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('exposicion_new') }}">Create a new exposicion</a>
+        </li>
+    </ul>
+{% endblock %}

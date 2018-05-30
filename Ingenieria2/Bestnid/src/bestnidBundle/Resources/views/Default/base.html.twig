@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>{% block title %}Bestnid{% endblock %}</title>
+		<meta name="generator" content="Bootply" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link href="{{ asset('css/bootstrap.min.css')}}" rel="stylesheet">
+		<!--[if lt IE 9]>
+			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+		<link href="{{ asset('css/estilos.css') }}" rel="stylesheet">
+	</head>
+	<body>
+	<nav class="navbar navbar-static">
+		<div class="container">
+			<div class="nav-collapse collase">
+				<div class="col-sm-1 col-xs-12" align="center">
+					<ul class="nav navbar-nav">  
+					  <li><a href="{{ path('inicio') }}" style="padding: 0px;"><img src="{{ asset('logo.png') }}" height="50px"></a></li>
+					</ul>
+				</div>
+				<div class="col-sm-7 col-xs-12">
+						<form class="navbar-form" role="search" action="{{ path('busqueda') }}" method="GET">
+							<div class="input-group" style="width:100%">
+								<input type="text" class="form-control" placeholder="Busqueda" name="q">
+								<div class="input-group-btn">
+									<button class="btn btn-default" type="submit">Buscar</button>
+								</div>
+							</div>
+						</form>
+				</div>        
+				<div class="col-sm-4 col-xs-12" align="center">
+					<ul class="nav navbar-right navbar-nav">
+					 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+								<li>
+							<a href="#" data-toggle="dropdown" class="dropdown-toggle">{{ app.user.username }} <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{ path('miCuenta') }}">Mi Cuenta</a></li>
+								<li><a href="{{ path('subastasUsuario') }}">Mis Subastas</a></li>
+								<li><a href="{{ path('ofertasUsuario') }}">Mis Ofertas</a></li>
+								{% if is_granted("ROLE_ADMIN") %}
+								<li><a href="{{ path('admin') }}">Administracion</a></li>
+								{% endif %}
+								<li class="divider"></li>
+								<li><a href="{{ path('fos_user_security_logout') }}">Cerrar Sesión</a></li>
+							</ul>
+						</li>
+						<li><a href="{{ path('subasta_create') }}">Subastar</a></li>
+
+					  {% else %}
+						  <li><a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a></li>
+						  <li><a href="{{ path('fos_user_registration_register') }}">Registrarse</a></li> 
+					  {% endif %}
+						  <li><a href="{{ path('faq') }}">FAQ</a></li>
+					</ul>
+				</div>
+			</div>		
+		</div>
+	</nav><!-- /.navbar -->
+
+<!-- |{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}   -->
+
+<!-- Begin Body -->
+<div class="container"> 
+{% block contenedor %}
+
+
+{% endblock %}
+	<br><br>
+	</div> 
+		<div id="footer" align="center">
+			<span>Bestnid - 2015</span>
+			<div class="pull-right">
+				<a style="color: white" href="{{ path('contacto_new') }}">Contacto con el administrador</a>
+			</div>
+		</div>
+ 
+	<!-- script references -->
+		<script src="{{ asset('//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js') }}"></script>
+		<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+		<script src="{{ asset('js/scripts.js') }}"></script>
+	</body>
+</html>

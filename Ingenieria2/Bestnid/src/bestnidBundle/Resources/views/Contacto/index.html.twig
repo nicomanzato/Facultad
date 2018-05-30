@@ -1,0 +1,55 @@
+{% extends 'bestnidBundle:Default:base.html.twig' %}
+
+{% block contenedor -%}
+<div class="container">
+
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('admin')}}">Administracion</a></li>
+	  <li class="active">Contactos</li>
+	</ol>
+	<div class="row panel">
+    <h3 class="highlight">Listado de contactos</h3>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Asunto</th>
+                <th>Comentario</th>
+                <th>E-Mail</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>{{ entity.asunto }}</td>
+                <td>{{ entity.comentario|length > 20 ? entity.comentario|slice(0, 20) ~ '...' : entity.comentario  }}</td>
+                <td>{{ entity.mail }}</td>
+                <td><a href="{{ path('contacto_show', { 'id': entity.id }) }}">Mostrar</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+	<div align="center">
+		<ul class="pagination">
+
+		{% if cantidadPaginas > 0 %}
+
+			{% for i in 0..cantidadPaginas-1 %}
+				<li
+
+					{% if (i == paginaActual) %}
+
+						class="active"
+
+					{% endif %}
+
+
+				><a href="{{ path('contacto', { 'paginaActual': i }) }}">{{ i+1 }}</a></li>
+			{% endfor %}
+
+		{% endif %}
+		</ul>
+	</div>
+</div>
+    {% endblock %}

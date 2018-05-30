@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:h="http://java.sun.com/jsf/html"
+template="/WEB-INF/facelets/templates/defaultLayout.xhtml"
+xmlns:componentes="http://java.sun.com/jsf/composite/componentes">
+
+<ui:define name="titulo">
+Crear Ruta - JRuteros
+</ui:define>
+<ui:define name="encabezado">
+Crear Ruta
+</ui:define>
+<ui:define name="contenido">
+
+<div class="row" align="center">
+	<div class="col-md-3"></div>
+	<div class="col-md-6">
+
+       	<h:form id="createRutaForm" class="form-singin">
+	            
+	        <h2 class="form-signin-heading">Crear Ruta</h2>
+	        
+	        <p><h:message for="createRutaForm" style="color: red" /></p>
+	        
+	    	<componentes:inputLabel id="nombreInput" value="#{ruta.nombre}" label="Nombre" />
+	    	
+	    	<componentes:inputLabel id="descripcionInput" value="#{ruta.descripcion}" label="Descripcion" />
+	    	
+	    	<componentes:privacidadSelectInput id="privacidad" value="#{ruta.publico}" label="Privacidad" />
+	    	
+	    	<componentes:selectInput id="formatoRuta" value="#{ruta.formato}" options="#{ruta.listadoFormatoRuta}" label="Formato" />
+	    	
+	    	<componentes:inputLabel id="distancia" value="#{ruta.distancia}" label="Distancia" />
+	    	
+	    	<componentes:selectInput id="dificultad" value="#{ruta.dificultad}" options="#{ruta.listadoDificultadRuta}" label="Dificultad" />
+	    	
+	    	<componentes:selectInput id="actividad" value="#{ruta.actividad}" options="#{ruta.listadoActividadRuta}" label="Actividad" />
+	    	
+	    	<componentes:inputLabel id="tiempo" value="#{ruta.tiempoEstimado}" label="Tiempo Estimado" />
+	    	
+	    	<componentes:dateInput id="fecha" value="#{ruta.fechaRealizacion}" label="Fecha de Realización" />
+	    		    	    	
+	    	<br></br>
+	
+	        <h:commandButton value="Enviar Datos" class="btn btn-success btn-large btn-block" action="#{ruta.createRuta}"/>
+	        
+		</h:form>
+		
+	</div>
+</div>	
+  
+</ui:define>
+</ui:composition>

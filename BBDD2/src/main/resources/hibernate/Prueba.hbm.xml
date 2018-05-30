@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="bd2.model.Prueba" table="PRUEBA">
+		<id name="idPrueba" type="long" column="ID_PRUEBA" >
+			<generator class="native" />
+		</id>
+		<property name="puntaje" column="puntaje" type="int"></property>
+		<many-to-one name="leccion" cascade="all" class="bd2.model.Leccion" column="idLeccion"></many-to-one> 
+	</class>
+</hibernate-mapping>

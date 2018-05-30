@@ -1,0 +1,59 @@
+{% extends 'bestnidBundle:Subasta:base.html.twig' %}
+
+{% block contenedor -%}
+<ol class="breadcrumb">
+		  <li><a href="{{ path('miCuenta')}}">Mi Cuenta</a></li>
+		  <li><a href="{{ path('subastasUsuario') }}">Mis Subastas</a></li>
+		  <li><a href="{{ path('subasta_show',{ id: entity.id}) }}">{{ entity.titulo }}</a></li>
+		  <li class="active">Editar</li>
+		</ol>
+<div class="panel">
+    <h3 class="highlight">Editar Subasta</h3>
+	
+	{% if msg == 1 %}
+			
+		<div class="alert alert-warning" role="alert">La subasta no se puede eliminar ya que ha sido referenciada por usuarios</div>
+			 
+	{% endif %}
+
+	{{ form_start(edit_form) }}
+	
+	{% if form_errors(edit_form.idCategoriaSubasta) %}
+		<div class="alert alert-danger" role="alert">
+		  <span class="sr-only">Error:</span>
+		  {{ form_errors(edit_form.idCategoriaSubasta) }}
+		</div>
+	{% endif %}
+	{% if  form_errors(edit_form.titulo) %}
+	<div class="alert alert-danger" role="alert">
+	  <span class="sr-only">Error:</span>
+	  {{ form_errors(edit_form.titulo) }}
+	</div>
+	{% endif %}
+	{% if form_errors(edit_form.descripcion) %}
+	<div class="alert alert-danger" role="alert">
+	  <span class="sr-only">Error:</span>
+	  {{ form_errors(edit_form.descripcion) }}
+	</div>
+	{% endif %}
+	{% if form_errors(edit_form.file) %}
+	<div class="alert alert-danger" role="alert">
+	  <span class="sr-only">Error:</span>
+	  {{ form_errors(edit_form.file) }}
+	</div>
+	{% endif %}
+	
+    <table class="table">
+		<tr><td>Categoria de la Subasta</td><td>{{ form_widget(edit_form.idCategoriaSubasta) }}</td></tr>
+		<tr><td>Titulo</td><td>{{ form_widget(edit_form.titulo) }}</td></tr>
+		<tr><td>Descripcion</td><td>{{ form_widget(edit_form.descripcion) }}</td></tr>
+		<tr><td>Imagen de Portada</td><td>{{ form_widget(edit_form.file) }}</td></tr>
+
+	</table>
+	<div class="row">
+		<div class="col-sm-4">{{ form_end(edit_form)  }}</div>
+		<div class="col-sm-4 pull-right">{{ form(delete_form, {'attr': {'onclick': 'return confirm("¿Esta seguro que desea eliminar la subasta?")'}}) }}</div>
+</div>
+
+
+{% endblock %}

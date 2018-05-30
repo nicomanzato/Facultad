@@ -1,0 +1,198 @@
+{% extends 'bestnidBundle:Subasta:base.html.twig' %}
+
+{% block contenedor -%}
+
+<ol class="breadcrumb">
+		<li><a href="{{ path('inicio')}}">Inicio</a></li>
+		<li><a href="{{ path('listarSubastas',{ CategoriaURL: entity.getIdCategoriaSubasta.getIdPadreCategoriaSubasta.getNombreUrl}) }}">{{ entity.getIdCategoriaSubasta.getIdPadreCategoriaSubasta.descripcionCategoriaSubasta}}</a></li>
+		<li><a href="{{ path('listarSubastas',{ CategoriaURL: entity.getIdCategoriaSubasta.getNombreURL}) }}">{{ entity.getIdCategoriaSubasta.descripcionCategoriaSubasta }}</a></li>
+		<li class="active">{{ entity.getTitulo }}</li>
+</ol>
+
+<div class="col col-sm-12 panel">
+	<h3 class="highlight">{{ entity.titulo }}</h3>
+	
+	{% if entity.estaFinalizada %}
+	
+		<div class="alert alert-warning" role="alert">
+		  La subasta esta finalizada
+		</div>
+	
+	{% endif %}
+	
+	{% if msg == 1 %}
+		<div class="alert alert-success" role="alert">
+		  Su oferta ha sido agregada
+		</div>
+	{% endif %}
+	
+	{% if msg == 2 %}
+		<div class="alert alert-warning" role="alert">
+		  Usted ya tiene una oferta en esta subasta
+		</div>
+	{% endif %}
+	
+	<div class="row">
+		<div class="col col-sm-7">
+			<img src="{{ asset(entity.getWebPath) }}" class="img-responsive">
+		</div> 
+		<div class="col col-sm-4 pull-right">
+			{% if not entity.estaFinalizada %}
+			
+				<div class="alert alert-warning" role="alert">La subasta finalizara el {{entity.fechaVencimiento|date("d/m/Y \\a\\ \\l\\a\\s g:ia")  }} </div>
+			
+			{% endif %}
+			
+			<div class="col col-sm-6"><a href="{{path('oferta_new',{idSubasta: entity.getId})}}" class="btn btn-success btn-block
+							
+							{% if is_granted("IS_AUTHENTICATED_REMEMBERED") and app.user.id == entity.getIdUserSubastador.getId %}
+									
+								disabled
+										
+							{% endif %}
+							
+							" role="button">Ofertar</a></div>
+			<div class="col col-sm-6"><a href="{{ path('subasta_ofertas_show', {idSubasta: entity.id})}}"><button type="button" class="btn btn-block btn-primary">Ver ofertas</button></a></div>
+			
+		</div> 
+	</div>
+				
+</div>
+
+<div class="panel col col-sm-12">
+	<h3 class="highlight">Descripción de la subasta</h3>
+	{{ entity.descripcion }}
+	
+</div>
+
+<div class="panel col col-sm-12">
+	<h3 class="highlight">Preguntas</h3>
+	<br>
+	
+	<ul class="list-group">
+	
+	{% if preguntas|length == 0%}
+	
+		<div class="alert alert-warning fade in">
+				No hay ninguna pregunta
+		</div>
+	
+	{% endif %}
+	
+	{% for p in preguntas %}
+	
+	<div>
+		<li class="list-group-item list-group-item-info"> <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>  {{ p.contenido }} </li>
+
+		{% if p.getRespuesta != NULL %}
+			<li class="list-group-item list-group-item-success"> {{ p.getRespuesta.getContenido }} </li>
+		{% endif %}
+	</div>
+	{% endfor%}
+	</ul>
+	<br>
+	{% if is_granted("IS_AUTHENTICATED_REMEMBERED") and ( app.user.id != entity.getIdUserSubastador.getId ) %}
+		{{ form_start(pregunta_form) }}
+		
+		{{ form_widget(pregunta_form.subasta, {'value' : entity.id}) }}
+		{{ form_widget(pregunta_form.contenido) }}
+		
+		{{ form_end(pregunta_form) }}
+	{% else %}
+	
+		{% if is_granted("IS_AUTHENTICATED_REMEMBERED") and app.user.id == entity.getIdUserSubastador.getId %}
+	
+			<div class="alert alert-danger fade in">
+				No puede hacer preguntas en su propia subasta
+			</div>
+	
+		{% else %}
+	
+			<div class="alert alert-danger fade in">
+				Debes iniciar sesion para hacer una pregunta
+			</div>
+		{% endif %}
+	
+	{% endif %}
+	<br>
+	
+</div>
+<div class="panel col col-sm-12">
+	<h3 class="highlight">Subastas Similares</h3>
+
+	{% for subasta in subastas_similares %}
+	
+		<div class="col-sm-3 col-md-3">
+				<a href="{{ path('subasta_show', { id: subasta.getId }) }}">
+					<div class="thumbnail">
+						<img src="{{ asset(subasta.getWebPath) }}" alt="...">
+						<div class="caption">
+							<div align="center"><h3>{{ subasta.titulo }}</h3></div>
+							<div align="center"><p><a href="{{ path('subasta_show', { id: subasta.getId }) }}" class="btn btn-primary" role="button">Ver Subasta</a> <a href="{{path('oferta_new',{idSubasta: subasta.getId})}}" class="btn btn-success 
+							
+							{% if is_granted("IS_AUTHENTICATED_REMEMBERED") and app.user.id == subasta.getIdUserSubastador.getId %}
+									
+								disabled
+										
+							{% endif %}
+							
+							" role="button">Ofertar</a></p></div>
+						</div>
+					</div>
+				</a>
+			</div>
+	
+	{% endfor %}
+	
+	{% if subastas_similares|length == 0%}
+	
+		<div class="alert alert-warning fade in">
+				No hay ninguna subasta similar
+		</div>
+	
+	{% endif %}
+	
+	<br>
+		
+</div>
+
+<div class="panel col col-sm-12">
+	<h3 class="highlight">Subastas del usuario</h3>
+
+	{% for subasta in subastas_usuario %}
+	
+		<div class="col-sm-3 col-md-3">
+				<a href="{{ path('subasta_show', { id: subasta.getId }) }}">
+					<div class="thumbnail">
+						<img src="{{ asset(subasta.getWebPath) }}" alt="...">
+						<div class="caption">
+							<div align="center"><h3>{{ subasta.titulo }}</h3></div>
+							<div align="center"><p><a href="{{ path('subasta_show', { id: subasta.getId }) }}" class="btn btn-primary" role="button">Ver Subasta</a> <a href="{{path('oferta_new',{idSubasta: subasta.getId})}}" class="btn btn-success 
+							
+							{% if is_granted("IS_AUTHENTICATED_REMEMBERED") and app.user.id == subasta.getIdUserSubastador.getId %}
+									
+								disabled
+										
+							{% endif %}
+							
+							" role="button">Ofertar</a></p></div>
+						</div>
+					</div>
+				</a>
+			</div>
+	
+	{% endfor %}
+	
+	{% if subastas_usuario|length == 0%}
+	
+		<div class="alert alert-warning fade in">
+			El usuario no posee otra subasta activa
+		</div>
+	
+	{% endif %}
+	
+	<br>
+		
+</div>
+
+{% endblock %}

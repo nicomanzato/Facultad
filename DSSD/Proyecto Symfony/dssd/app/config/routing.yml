@@ -1,0 +1,8 @@
+dssd_bonita:
+    resource: "@DSSDBonitaBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation

@@ -1,0 +1,7 @@
+Entrega 1:
+
+Entrevista 01: https://github.com/darkniking93/Ingenieria2/blob/master/Entrega%201/Entrevista%2001.doc?raw=true
+
+Entrevista 02: https://github.com/darkniking93/Ingenieria2/blob/master/Entrega%201/Entrevista%2002.doc?raw=true
+
+SRS: https://github.com/darkniking93/Ingenieria2/blob/master/Entrega%201/Std%20(830)%20-%202015.doc?raw=true

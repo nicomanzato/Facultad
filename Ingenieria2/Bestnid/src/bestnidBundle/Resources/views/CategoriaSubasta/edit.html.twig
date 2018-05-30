@@ -1,0 +1,67 @@
+{% extends 'bestnidBundle:CategoriaSubasta:base.html.twig' %}
+
+{% block contenedor -%}
+<ol class="breadcrumb">
+  <li><a href="{{ path('admin')}}">Administracion</a></li>
+  <li><a href="{{ path('categoriasubasta')}}">Categoria de Subastas</a></li>
+  <li class="active">Editar</li>
+</ol>
+<div class="panel">
+    <h3 class="highlight">Modificar Categoria de Subasta</h3>
+
+    {{ form_start(edit_form) }}
+	
+	{% if msg == 1 %}
+	
+		<div class="alert alert-danger" role="alert">
+		  <span class="sr-only">Error:</span>
+		  Ya existe una categoria con el nombre ingresado
+		</div>
+		
+	{% endif%}
+	
+	{% if msg == 2 %}
+	
+		<div class="alert alert-danger" role="alert">
+		  <span class="sr-only">Error:</span>
+		  No se puede eliminar ya que hay referencias a la categoria
+		</div>
+		
+	{% endif%}
+	
+	{% if form_errors(edit_form.descripcionCategoriaSubasta) %}
+		<div class="alert alert-danger" role="alert">
+		  <span class="sr-only">Error:</span>
+		  {{ form_errors(edit_form.descripcionCategoriaSubasta) }}
+		</div>
+		{% endif %}
+		{% if  form_errors(edit_form.idPadreCategoriaSubasta) %}
+		<div class="alert alert-danger" role="alert">
+		  <span class="sr-only">Error:</span>
+		  {{ form_errors(edit_form.idPadreCategoriaSubasta) }}
+		</div>
+		{% endif %}
+		{% if form_errors(edit_form.nombreURL) %}
+		<div class="alert alert-danger" role="alert">
+		  <span class="sr-only">Error:</span>
+		  {{ form_errors(edit_form.nombreURL) }}
+		</div>
+		{% endif %}
+	
+		<table class="table">
+			<tr><td>Nombre de la categoria</td><td>{{ form_widget(edit_form.descripcionCategoriaSubasta) }}</td></tr>
+			<tr><td>Categoria en la que esta contenida*</td><td>{{ form_widget(edit_form.idPadreCategoriaSubasta) }}</td></tr>
+			<tr><td>Nombre que se usara en la URL</td><td>{{ form_widget(edit_form.nombreURL) }}</td></tr>
+
+		</table>
+		
+		<div class="row">
+			<div class="col-sm-4">{{ form_widget(edit_form.submit) }}{{ form_end(edit_form)  }}	</div>
+			<div class="col-sm-4 pull-right">{{ form(delete_form, {'attr': {'onclick': 'return confirm("¿Esta seguro que desea eliminar esta categoria?")'}}) }}</div>
+		</div>
+		
+
+	<br>
+	<p>*Si usted no define una categoria, se definira la misma como una categoria padre</p>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html 
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://xmlns.jcp.org/jsf/html"
+xmlns:f="http://xmlns.jcp.org/jsf/core"
+xmlns:ui= "http://xmlns.jcp.org/jsf/facelets"
+xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+<title>JRuteros</title>
+<meta charset="iso-8859-1" />
+<link rel="stylesheet" href="styles/layout.css" type="text/css" />
+<link href="css/bootstrap.min.css" rel="stylesheet" />
+</h:head>
+<body>
+<div class="wrapper row1">
+  <header id="header" class="clear">
+    <div id="hgroup">
+      <h1><a href="index.xhtml">JRuteros</a></h1>
+      <h2></h2>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.xhtml">Home</a></li>
+        <c:if test="#{user.loggedIn == false}">
+	        <li><a href="login.xhtml">Login</a></li>
+	        <li class="last"><a href="register.xhtml">Registro</a></li>
+        </c:if>
+        <c:if test="#{user.loggedIn == true}">
+        	<li><a href="backend.xhtml">Mi Cuenta(#{user.username})</a></li>
+        	<li class="last"><h:form><h:commandLink action="#{user.logout}" value="Salir"/></h:form></li>
+        </c:if>
+      </ul>
+    </nav>
+  </header>
+</div>
+<!-- content -->
+<div class="wrapper row2">
+  <div id="container" class="clear">
+    <ui:insert name="contenido">Contenido</ui:insert>
+  </div>
+</div>
+<!-- Footer -->
+<div class="wrapper row3">
+  <footer id="footer" class="clear">
+    <p class="fl_left">Copyright 2012 - All Rights Reserved - <a href="#">Domain Name</a></p>
+    <p class="fl_right">Template by <a href="http://www.os-templates.com/" title="Free Website Templates">OS Templates</a></p>
+  </footer>
+</div>
+</body>
+</html>

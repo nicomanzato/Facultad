@@ -1,0 +1,46 @@
+{% extends 'bestnidBundle:User:base.html.twig' %}
+
+{% block contenedor %}  
+	<div class="container"> 
+		<div class="row">
+			<div class="col col-sm-3">
+				<ul class="list-group menuVertical">
+					<li class="list-group-item"><h3 class="highlight">Mi Cuenta</h3></li>
+					<li class="list-group-item"><a href="{{ path('fos_user_profile_show') }}">Datos Personales</a></li>
+					<li class="list-group-item"><a href="{{ path('fos_user_change_password') }}">Cambia contraseña</a></li>
+					<li class="list-group-item"><span class="badge">{{ cantPreguntas }}</span><a href="{{ path('preguntas') }}">Preguntas</a></li>
+					<li class="list-group-item"><a href="{{ path('tarjeta') }}">Tarjetas Asociadas</a></li>
+					<li class="list-group-item"><a href="{{ path('venta') }}">Mis Compras</a></li>
+					<li class="list-group-item"><a href="{{ path('productosVendidos') }}">Mis Ventas</a></li>
+				</ul>
+			</div>
+			<div class="col col-sm-9">
+				<div class="panel">
+					{% block contenedorInterno %}
+					<ul class="list-group">
+						<li class="list-group-item"><h3 class="highlight">Notificaciones</h3></li>
+						{% if Notificaciones|length == 0%}
+							<li class="list-group-item"><div class="alert alert-warning" role="alert">Por el momento no tiene ninguna notificacion</div></li>
+						{% else %}
+						
+							{% for n in Notificaciones %}
+							
+								<li class="list-group-item">
+										Ha ganado la subasta <a href="{{ path('subasta_show',{'id': n.subasta.id}) }}">{{ n.subasta.titulo }}</a>
+										<a href="{{ path('venta_new',{idOferta: n.getId}) }}"><button class="btn btn-success"> Pagar </button></a>
+								</li>
+							
+							{% endfor %}
+						
+						{% endif %}
+					</ul>
+					{% endblock %}
+				</div> 
+		
+			</div> 
+			<div class="col col-sm-3">
+				
+			</div>
+		</div>
+	</div>
+{% endblock %}

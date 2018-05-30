@@ -1,0 +1,36 @@
+{% extends 'bestnidBundle:User:index.html.twig' %}
+
+{% block contenedorInterno %}  
+		<div class="row">
+			<div class="col col-sm-12">
+					<h3 class="highlight">Preguntas sin responder</h3>
+					{% if preguntas|length == 0 %}
+						
+						<div class="alert alert-warning" role="alert">Por el momento no tiene ninguna pregunta</div>
+					
+					{% endif %}
+					{% for p in preguntas %}
+						
+						<div class="panel-default">
+						  <div class="panel-heading"><a href="{{ path('subasta_show', { id: p['p'].subasta.getId}) }}">{{ p['p'].subasta.getTitulo }}</a></div>
+						  <div class="panel-body">
+							{{ form_start(p['form']) }}
+						
+							<p> {{ p['p'].contenido }} </p>
+							
+							{{ form_widget(p['form'].pregunta, {'value' : p['p'].getId}) }}
+							{{ form_widget(p['form'].contenido) }}
+							<div>
+								<div class="col col-sm-10">{{ form_end(p['form']) }}</div>
+								<div class="col col-sm-2">{{ form(p['delete_form'], {'attr': {'onclick': 'return confirm("¿Esta seguro que desea eliminar esta categoria?")'}}) }}	</div>
+							</div>
+						  </div>
+						</div>
+					{% endfor %}
+		
+			</div> 
+			<div class="col col-sm-3">
+				
+			</div>
+		</div>
+{% endblock %}

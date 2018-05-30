@@ -1,9 +1,3 @@
-# Ingenieria2
+Ingenieria del software 2
 
-Grupo 31
-
-Nicolas Dario Manzato
-
-Juan Ignacio Harguindeguy
-
-Sebastian Yomha
+Sistema de subastas alternativo
